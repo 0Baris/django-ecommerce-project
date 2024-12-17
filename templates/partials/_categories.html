@@ -1,0 +1,11 @@
+<div class="container-fluid bg-light">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12">
+            <div class="d-flex flex-wrap justify-content-center">
+                {% for kategori in kategoriler %}
+                    <a href="{% url 'category' kategori.id %}" class="btn">{{ kategori.isim }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
