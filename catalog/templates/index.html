@@ -4,6 +4,35 @@
 
 {% block content %}
 
-<h1>Anasayfa</h1>
+<div id="carouselExampleIndicators" class="carousel slide">
+    
+      <div class="carousel-indicators">
+        {% for slide in slides %}
+          <button type="button" data-bs-target="#carouselExampleIndicators" 
+          data-bs-slide-to="{{ slide.id }}" class="active" aria-label="{{ slide.isim }}" aria-current="true">
+        </button>
+        {% endfor %}
+      </div>
+      
+      <div class="carousel-inner">
+        {% for slide in slides %}
+
+        <div class="carousel-item active">  
+          <img src="{{ slide.resim }}" class="d-block w-100" alt="{{ slide.isim }}">
+        </img>
+        </div>
+        {% endfor %}
+      </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+  
 
 {% endblock %}
