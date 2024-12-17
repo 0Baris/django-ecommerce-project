@@ -5,20 +5,18 @@
   <div class="carousel-indicators">
     {% for slide in slides %}
       <button type="button" data-bs-target="#carouselExampleIndicators" 
-      data-bs-slide-to="{{ slide.id }}" class="active" aria-label="{{ slide.isim }}" aria-current="true">
-    </button>
+      data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="{{ slide.isim }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
     {% endfor %}
   </div>
   
   <div class="carousel-inner">
     {% for slide in slides %}
-
-    <div class="carousel-item active">  
+    <div class="carousel-item {% if forloop.first %}active{% endif %}">  
       <img src="{{ slide.resim }}" class="d-block w-100" alt="{{ slide.isim }}">
-    </img>
     </div>
     {% endfor %}
   </div>
+
 
 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
   <span class="carousel-control-prev-icon" aria-hidden="true"></span>

@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="d-flex flex-wrap justify-content-center">
                 {% for kategori in kategoriler %}
-                    <a href="{% url 'category' kategori.slug %}" class="btn">{{ kategori.isim }}</a>
+                    <a href="{% url 'category' kategori.slug %}" class="btn">{{ kategori.name }}</a>
                 {% endfor %}
             </div>
         </div>

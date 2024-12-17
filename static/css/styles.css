@@ -1,0 +1,22 @@
+.text-hover {
+    transition: color 0.3s ease-in-out;
+}
+
+.text-hover:hover {
+    color: #007bff; /* İstediğiniz rengi buraya ekleyin */
+}
+
+.text-grey {
+    color: grey;
+}
+
+.card-no-border {
+    border: none;
+    text-decoration: none;
+}
+
+.card-no-border:hover {
+    text-decoration: none;
+    border: 0.5px solid #007bff;
+    transition: border-color 0.5s ease-in-out;
+}
