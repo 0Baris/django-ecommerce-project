@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{{ kategori.name }}{% endblock %}
 
 {% block content %}
 
-{{ kategori.name }}
+
+<div>
+    <h3 class="text-2xl fw-bold text-center mb-4 mt-4 "><strong>{{ kategori.name }}</strong></h3>
+  
+    {% include 'partials/_product.html' %}
+  
+  </div>
 
 {% endblock %}

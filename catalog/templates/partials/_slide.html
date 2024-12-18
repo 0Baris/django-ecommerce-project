@@ -1,7 +1,7 @@
 {% load static %}
 
 <div id="carouselExampleIndicators" class="carousel slide">
-    
+  
   <div class="carousel-indicators">
     {% for slide in slides %}
       <button type="button" data-bs-target="#carouselExampleIndicators" 
@@ -12,7 +12,9 @@
   <div class="carousel-inner">
     {% for slide in slides %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">  
-      <img src="{{ slide.resim }}" class="d-block w-100" alt="{{ slide.isim }}">
+      <a href="{% url 'product' slide.product.slug %}">
+        <img src="{{ slide.image }}" class="d-block w-100" alt="{{ slide.name }}">
+      </a>
     </div>
     {% endfor %}
   </div>

@@ -1,9 +1,9 @@
 <div class="container-fluid bg-light">
     <div class="row justify-content-center align-items-center">
         <div class="col-12">
-            <div class="d-flex flex-wrap justify-content-center">
-                {% for kategori in kategoriler %}
-                    <a href="{% url 'category' kategori.slug %}" class="btn">{{ kategori.name }}</a>
+            <div class="d-flex flex-wrap justify-content-center text-hover">
+                {% for kategori in categories %}
+                    <a href="{% url 'category' kategori.slug %}" class="btn"><strong>{{ kategori.name }}</strong></a>
                 {% endfor %}
             </div>
         </div>
