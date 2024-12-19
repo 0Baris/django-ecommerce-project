@@ -1,9 +1,63 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %} Ürün {% endblock %}
+{% block title %} {{ product.name }} {% endblock %}
 
 {% block content %}
 
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Anasayfa</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'category' product.category.slug %}">{{ product.category }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+      </ol>
+    </nav>
+
+    
+
+    <!-- Product Section -->
+    <div class="row">
+      <!-- Product Images -->
+      <div class="col-md-6">
+        <div class="product-img mb-3">
+          <img src="{{ product.image.url }}" alt="Main Product Image" style="width:400px;">
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <img src="{{ product.image.url }}" class="me-2" alt="Main Product Image" style="width:100px;">
+            <img src="https://via.placeholder.com/100" class="me-2" alt="Thumbnail 1">
+            <img src="https://via.placeholder.com/100" class="me-2" alt="Thumbnail 2">
+            <img src="https://via.placeholder.com/100" class="me-2" alt="Thumbnail 3">
+          </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="col-md-6">
+        <h2 class="product-title">{{ product.name }}</h2>
+        <p class="rating">
+          ★★★★★ <span>(1581 Yorum)</span>
+        </p>
+        <h3 class="price">{{ product.price }} TL</h3>
+
+        <div class="my-3">
+            <label for="quantity" class="form-label">Adet:</label>
+            <div class="input-group" style="width: 150px;">
+                <button class="btn btn-outline-secondary" type="button">-</button>
+                <input type="number" class="form-control text-center" id="quantity" value="1" max="{{ product.quantity }}">
+                <button class="btn btn-outline-secondary" type="button">+</button>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100">Sepete Ekle</button>
+
+        <div class="mt-4">
+          <p><strong>Ürün Açıklaması:</strong></p>
+          <p>{{ product.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}

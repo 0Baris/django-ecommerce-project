@@ -33,3 +33,20 @@ html, body {
     text-align: center;
     padding: 10px 0;
 }
+
+
+.product-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.price {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ff5733;
+}
+.rating {
+  color: #ffc107;
+}
+.product-img img {
+  width: 100%;
+}

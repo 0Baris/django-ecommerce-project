@@ -56,3 +56,4 @@ class Slide(models.Model):
             self.product.slug = slugify(self.product.name, allow_unicode=True)
             self.product.save()
         super().save(*args, **kwargs)
+
