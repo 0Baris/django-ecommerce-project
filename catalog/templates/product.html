@@ -5,35 +5,36 @@
 
 {% block content %}
 
-<div class="container my-5">
-    <!-- Breadcrumb -->
+<div class="container my-4">
+
     <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Anasayfa</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'category' product.category.slug %}">{{ product.category }}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
-      </ol>
-    </nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'index' %}">Anasayfa</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'category' product.category.slug %}">{{ product.category.name }}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+      </nav>
 
-    
-
-    <!-- Product Section -->
-    <div class="row">
-      <!-- Product Images -->
+    <div class="row my-2 mt-2">
       <div class="col-md-6">
         <div class="product-img mb-3">
-          <img src="{{ product.image.url }}" alt="Main Product Image" style="width:400px;">
+          <img id="main-product-image" src="{{ product.image.url }}" alt="Main Product Image" class="main-image">
         </div>
 
         <div class="d-flex justify-content-center">
-            <img src="{{ product.image.url }}" class="me-2" alt="Main Product Image" style="width:100px;">
-            <img src="https://via.placeholder.com/100" class="me-2" alt="Thumbnail 1">
-            <img src="https://via.placeholder.com/100" class="me-2" alt="Thumbnail 2">
-            <img src="https://via.placeholder.com/100" class="me-2" alt="Thumbnail 3">
-          </div>
+          <img src="{{ product.image.url }}" class="thumbnail me-2 product-image-frame thumbnail-image" alt="Ürün Resmi" style="width:100px; height:100px;">
+          {% for image in product.images.all %}
+              <img src="{{ image.image.url }}" class="thumbnail me-2 product-image-frame thumbnail-image" alt="Ürün Resmi" style="width:100px; height:100px;">
+          {% endfor %}
+      </div>
+      
       </div>
 
-      <!-- Product Details -->
+
       <div class="col-md-6">
         <h2 class="product-title">{{ product.name }}</h2>
         <p class="rating">
@@ -44,9 +45,7 @@
         <div class="my-3">
             <label for="quantity" class="form-label">Adet:</label>
             <div class="input-group" style="width: 150px;">
-                <button class="btn btn-outline-secondary" type="button">-</button>
-                <input type="number" class="form-control text-center" id="quantity" value="1" max="{{ product.quantity }}">
-                <button class="btn btn-outline-secondary" type="button">+</button>
+                <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="{{ product.quantity }}">
             </div>
         </div>
 
@@ -59,5 +58,17 @@
       </div>
     </div>
   </div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+  document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+    thumbnail.addEventListener('click', function () {
+      const mainImage = document.getElementById('main-product-image');
+      mainImage.src = this.src;
+    });
+  });
+</script>
 
 {% endblock %}

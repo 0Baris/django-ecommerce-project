@@ -1,3 +1,6 @@
+/* CSS Dosyası çoğunlukla yapay zeka kullanılarak oluşturulmuştur. */
+/* Sonuçta bu bir django back-end projesi >3 */
+
 html, body {
     height: 100%;
 }
@@ -7,7 +10,7 @@ html, body {
 }
 
 .text-hover:hover {
-    color: #007bff; /* İstediğiniz rengi buraya ekleyin */
+    color: #007bff;
 }
 
 .text-grey {
@@ -29,11 +32,10 @@ html, body {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: #f8f9fa; /* İstediğiniz arka plan rengini buraya ekleyin */
+    background-color: #f8f9fa;
     text-align: center;
     padding: 10px 0;
 }
-
 
 .product-title {
   font-size: 1.5rem;
@@ -42,11 +44,53 @@ html, body {
 .price {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #ff5733;
+  color: #000000;
 }
 .rating {
   color: #ffc107;
 }
 .product-img img {
   width: 100%;
+}
+
+.breadcrumb-item a {
+  text-decoration: none !important;
+  color: grey !important;
+  font-size: 13px;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: none !important;
+  color: grey !important;
+}
+
+.breadcrumb-item.active {
+  color: grey !important;
+}
+
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  color: grey;
+  padding: 0 8px;
+}
+
+.product-image-frame {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.product-image-frame:hover {
+  border-color: #007bff;
+}
+
+.main-image {
+  max-height: 400px;
+  width: auto;
+  object-fit: contain;
+}
+
+.thumbnail-image {
+  object-fit: cover;
 }

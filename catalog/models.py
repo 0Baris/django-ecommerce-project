@@ -19,7 +19,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='static/img/products')
+    image = models.ImageField(upload_to='static/img/products', )
     sku = models.CharField(max_length=50, unique=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     slug = models.SlugField(blank=True)
@@ -38,8 +38,15 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name, allow_unicode=True)
+            unique_slug = slugify(self.name, allow_unicode=True)
+            counter = 1
+            while Product.objects.filter(slug=unique_slug).exists():
+                unique_slug = f"{slugify(self.name, allow_unicode=True)}-{counter}"
+                counter += 1
+            self.slug = unique_slug
+
         super().save(*args, **kwargs)
+
 
 class Slide(models.Model):
     name = models.CharField(max_length=100)
@@ -51,9 +58,11 @@ class Slide(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        if not self.product.slug:
-            self.product.slug = slugify(self.product.name, allow_unicode=True)
-            self.product.save()
-        super().save(*args, **kwargs)
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='static/img/products/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.product.name} Resmi {self.id}"
