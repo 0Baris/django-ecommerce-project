@@ -94,3 +94,41 @@ html, body {
 .thumbnail-image {
   object-fit: cover;
 }
+
+#button-decrement,
+#button-increment {
+    width: 40px;
+}
+
+.input-group .form-control {
+  border-left: none;
+  border-right: none;
+}
+
+.input-group {
+  z-index: 0;
+}
+
+.btn-primary {
+  background-color: #0d47a1;
+}
+
+.display-6 {
+  font-size: 2rem;
+}
+
+.stars {
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.product-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+}
+
+.mini-desc {
+  font-size: 16px;
+  font-weight: 500;
+}

@@ -36,5 +36,6 @@ def product(request, slug):
     context = {
         'product': product,
         'categories': Category.objects.all(),
+        'products': Product.objects.all()
     }
     return render(request, 'product.html', context)

@@ -17,58 +17,67 @@
             </li>
             <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
         </ol>
-      </nav>
+    </nav>
 
     <div class="row my-2 mt-2">
-      <div class="col-md-6">
-        <div class="product-img mb-3">
-          <img id="main-product-image" src="{{ product.image.url }}" alt="Main Product Image" class="main-image">
-        </div>
+        <div class="col-md-6">
+            <div class="product-img mb-3">
+                <img id="main-product-image" src="{{ product.image.url }}" alt="Main Product Image" class="main-image">
+            </div>
 
-        <div class="d-flex justify-content-center">
-          <img src="{{ product.image.url }}" class="thumbnail me-2 product-image-frame thumbnail-image" alt="Ürün Resmi" style="width:100px; height:100px;">
-          {% for image in product.images.all %}
-              <img src="{{ image.image.url }}" class="thumbnail me-2 product-image-frame thumbnail-image" alt="Ürün Resmi" style="width:100px; height:100px;">
-          {% endfor %}
-      </div>
-      
-      </div>
-
-
-      <div class="col-md-6">
-        <h2 class="product-title">{{ product.name }}</h2>
-        <p class="rating">
-          ★★★★★ <span>(1581 Yorum)</span>
-        </p>
-        <h3 class="price">{{ product.price }} TL</h3>
-
-        <div class="my-3">
-            <label for="quantity" class="form-label">Adet:</label>
-            <div class="input-group" style="width: 150px;">
-                <input type="number" class="form-control text-center" id="quantity" value="1" min="1" max="{{ product.quantity }}">
+            <div class="d-flex justify-content-center">
+                <img src="{{ product.image.url }}" class="thumbnail me-2 product-image-frame thumbnail-image" alt="Ürün Resmi" style="width:100px; height:100px;">
+                {% for image in product.images.all %}
+                    <img src="{{ image.image.url }}" class="thumbnail me-2 product-image-frame thumbnail-image" alt="Ürün Resmi" style="width:100px; height:100px;">
+                {% endfor %}
             </div>
         </div>
 
-        <button class="btn btn-primary btn-lg w-100">Sepete Ekle</button>
+        <div class="col-md-6">
+            <div class="product-header">
+              <p class="rating mb-2 d-flex align-items-center gap-1">
+                <span class="stars text-warning">★★★★★</span>
+                <span class="text-warning">({{ product.reviews }} Yorum)</span>
+              </p>
+              <h3 class="product-title mb-2">{{ product.name }}</h3>
+              <h2 class="mini-desc text-muted">{{ product.mini_desc }}</h2>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="display-6 fw-bold mb-0">{{ product.price}} TL</h3>
+            </div>
 
-        <div class="mt-4">
-          <p><strong>Ürün Açıklaması:</strong></p>
-          <p>{{ product.description }}</p>
+            <div class="mb-3">
+                <div class="d-flex gap-3">
+                    <div class="input-group" style="width: 120px;">
+                        <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="{{ product.quantity }}">
+                    </div>
+
+                    <button class="btn btn-primary flex-grow-1">
+                        <i class="bi bi-cart"></i> SEPETE EKLE
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <p><strong>Ürün Açıklaması:</strong></p>
+                <p>{{ product.description }}</p>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
+
+</div>
+
+{% include 'partials/_best_sellers.html' %}
 
 {% endblock %}
-
 {% block js %}
-<script>
-  document.querySelectorAll('.thumbnail').forEach(thumbnail => {
-    thumbnail.addEventListener('click', function () {
-      const mainImage = document.getElementById('main-product-image');
-      mainImage.src = this.src;
+  <script>
+    document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+      thumbnail.addEventListener('click', function () {
+        const mainImage = document.getElementById('main-product-image');
+        mainImage.src = this.src;
+      });
     });
-  });
-</script>
-
+    
+  </script>
 {% endblock %}

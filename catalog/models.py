@@ -24,7 +24,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     slug = models.SlugField(blank=True)
     description = models.TextField()
-    mini_desc = models.CharField(max_length=20)
+    mini_desc = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     stock_quantity = models.PositiveIntegerField(default=0)
     is_in_stock = models.BooleanField(default=True)
