@@ -1,65 +1,35 @@
-{% extends 'base.html' %}
+{% extends 'base-account.html' %}
 {% load static %}
 
-{% block content %}
+{% block account %}
 
-<!-- filepath: /c:/Users/Cem/django-ecommerce/user/templates/account.html -->
-<div class="container my-4">
-    <div class="row g-4">
-      <!-- Sidebar -->
-      <div class="col-md-3">
-        <h1 class="mb-4 fw-bold fs-2 text-center text-md-start">Hesabım</h1>
-        <div class="d-flex flex-md-column overflow-auto">
-          <!-- Account Info Link -->
-          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 fw-semibold" href="/account/management">
-            <img src="/assets/images/account.png" width="24" height="24" alt="Hesap" class="flex-shrink-0">
-            <div class="ms-3">Hesap Bilgilerim</div>
-          </a>
-  
-          <!-- Orders Link -->
-          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3" href="">
-            <img src="/assets/images/orders.png" width="24" height="24" alt="Siparişler" class="flex-shrink-0">
-            <div class="ms-3">Siparişlerim</div>
-          </a>
-  
-          <!-- Addresses Link -->
-          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3" href="">
-            <img src="/assets/images/addresses.png" width="24" height="24" alt="Adresler" class="flex-shrink-0">
-            <div class="ms-3">Adreslerim</div>
-          </a>
-        </div>
+<div class="col-md-9">
+    <div class="bg-white p-4 rounded shadow-sm">
+      <div class="mb-4 d-flex justify-content-between align-items-center">
+        <div class="fw-semibold fs-4">Hesap Bilgilerim</div>
       </div>
-  
-      <!-- Main Content -->
-      <div class="col-md-9">
-        <div class="bg-white p-4 rounded shadow-sm">
-          <div class="mb-4 d-flex justify-content-between align-items-center">
-            <div class="fw-semibold fs-4">Hesap Bilgilerim</div>
+      <div class="col-12 col-md-8">
+        <form class="row g-3">
+
+          <div class="col-md-6">
+            <label class="form-label fw-medium">Ad</label>
+            <input type="text" class="form-control bg-light" disabled="" value="{{ user.name }}" style="height: 50px;">
           </div>
-          <div class="col-12 col-md-8">
-            <form class="row g-3">
-              <!-- Name -->
-              <div class="col-md-6">
-                <label class="form-label fw-medium">Ad</label>
-                <input type="text" class="form-control bg-light" disabled="" value="{{ user.name }}" style="height: 50px;">
-              </div>
-  
-              <!-- Surname -->
-              <div class="col-md-6">
-                <label class="form-label fw-medium">Soyad</label>
-                <input type="text" class="form-control bg-light" disabled="" value="{{ user.surname }}" style="height: 50px;">
-              </div>
-  
-              <!-- Email -->
-              <div class="col-12">
-                <label class="form-label fw-medium">Email</label>
-                <input type="email" class="form-control bg-light" disabled="" value="{{ user.email }}" style="height: 50px;">
-              </div>
-            </form>
+
+          <div class="col-md-6">
+            <label class="form-label fw-medium">Soyad</label>
+            <input type="text" class="form-control bg-light" disabled="" value="{{ user.surname }}" style="height: 50px;">
           </div>
-        </div>
+
+          <div class="col-12">
+            <label class="form-label fw-medium">Email</label>
+            <input type="email" class="form-control bg-light" disabled="" value="{{ user.email }}" style="height: 50px;">
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
+</div>
 
 {% endblock %}

@@ -1,41 +1,37 @@
 {% load static %}
 
-<footer class="bg-light text-center text-lg-start mt-auto">
+<footer class="bg-dark text-center text-lg-start mt-auto">
   <div class="container p-4">
     <div class="row">
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase text-light">Hakkımızda</h5>
+        <p class="text-light">
+          Şirketiniz hakkında kısa bir açıklama veya slogan yazabilirsiniz.
+        </p>
+      </div>
 
-    <!-- Hakkında -->
-    <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
-      <h5 class="text-uppercase">Hakkımızda</h5>
-      <p>
-      Şirketiniz hakkında kısa bir açıklama veya slogan yazabilirsiniz.
-      </p>
-    </div>
-  
-    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
-      <h5 class="text-uppercase">İletişim</h5>
-      <ul class="list-unstyled mb-0">
-      <li><a href="mailto:baris@proton.me" class="text-dark text-decoration-none text-hover">Email</a></li>
-      <li><a href="tel:+1234567890" class="text-dark text-decoration-none text-hover">Telefon</a></li>
-      <li><a href="https://goo.gl/maps/example" class="text-dark text-decoration-none text-hover">Adres</a></li>
-      </ul>
-    </div>
-  
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase text-light">İletişim</h5>
+        <ul class="list-unstyled mb-0">
+          <li><a href="mailto:baris@proton.me" class="text-light text-decoration-none text-hover">Email</a></li>
+          <li><a href="tel:+1234567890" class="text-light text-decoration-none text-hover">Telefon</a></li>
+          <li><a href="https://goo.gl/maps/example" class="text-light text-decoration-none text-hover">Adres</a></li>
+        </ul>
       </div>
     </div>
-    
-    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-      <a href="https://www.instagram.com/bariscemant/" class="text-dark text-decoration-none text-hover">
-      <strong style="color:rgb(0, 38, 255);">© Developed by Baris</strong>
-      </a>
-      <div class="float-end">
-      <a href="https://www.instagram.com/bariscemant/" class="text-dark text-decoration-none mx-2">
+  </div>
+
+  <div class="text-center p-3 bg-dark">
+    <a href="https://www.instagram.com/bariscemant/" class="text-light text-decoration-none text-hover">
+      <strong class="animated-text">Made with ❤️ by the Baris</strong>
+    </a>
+    <div class="float-end">
+      <a href="https://www.instagram.com/bariscemant/" class="text-light text-decoration-none mx-2">
         <img src="{% static 'img/instagram.webp' %}" alt="Instagram" style="width: 24px; height: 24px; filter: invert(50%) sepia(100%) saturate(500%) hue-rotate(270deg);">
       </a>
-      <a href="" class="text-dark text-decoration-none mx-2">
+      <a href="" class="text-light text-decoration-none mx-2">
         <img src="{% static 'img/whatsapp.webp' %}" alt="Whatsapp" style="width: 24px; height: 24px; filter: invert(50%) sepia(100%) saturate(500%) hue-rotate(90deg);">
       </a>
-      </div>
     </div>
-
-  </footer>
+  </div>
+</footer>

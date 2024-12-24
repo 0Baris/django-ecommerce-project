@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from .models import Address
 
 class RegisterUserForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(
@@ -26,4 +27,15 @@ class RegisterUserForm(UserCreationForm):
         if commit:
             user.save()
         return user
-    
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['title', 'address', 'city', 'district', 'postal_code']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Başlık'}),
+            'address': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Adres', 'rows': 3}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Şehir'}),
+            'district': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'İlçe'}),
+            'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Posta Kodu'}),
+        }

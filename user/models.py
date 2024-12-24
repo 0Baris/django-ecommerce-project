@@ -25,3 +25,25 @@ class Address(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.title}"
+    
+    def full_address(self):
+        return f"{self.address}, {self.district}, {self.city}, {self.postal_code}"
+
+
+class Order(models.Model):
+    STATUS_CHOICES = [
+        ('Pending', 'Sipariş Alındı'),
+        ('Processing', 'Hazırlanıyor'),
+        ('Shipped', 'Kargolandı'),
+        ('Delivered', 'Teslim Edildi'),
+        ('Cancelled', 'İptal Edildi'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='orders')
+    address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, related_name='orders')
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"Order {self.id} by {self.user.email}"

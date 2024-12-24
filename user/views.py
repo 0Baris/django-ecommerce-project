@@ -1,12 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
-from .forms import RegisterUserForm
+from .forms import RegisterUserForm, AddressForm
 from django.contrib.auth.decorators import login_required
-
-@login_required
-def account(request):
-    return render(request, 'account.html', {'user': request.user})
+from .models import Address, Order
 
 def login_user(request):
     if request.method == "POST":
@@ -49,3 +46,44 @@ def register_user(request):
 
 def terms(request):
     return render(request, 'terms.html')
+
+@login_required
+def account(request):
+    return render(request, 'account.html', {'user': request.user})
+
+@login_required
+def orders(request):
+    return render(request, 'orders.html', {'user': request.user})
+
+@login_required
+def adress(request):
+    return render(request, 'address.html', {'user': request.user})
+
+@login_required
+def add_address(request):
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user
+            address.save()
+            return redirect('adress')
+    else:
+        form = AddressForm()
+    return render(request, 'address.html', {'form': form})
+
+@login_required
+def delete_address(request, address_id):
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    if request.method == "POST":
+        address.delete()
+        return redirect('adress')
+    return render(request, 'delete_address.html', {'address': address})
+
+@login_required
+def orders_list(request, order):
+    address = get_object_or_404(Order, id=address_id, user=request.user)
+    if request.method == "POST":
+        address.delete()
+        return redirect('adress')
+    return render(request, 'delete_address.html', {'address': address})

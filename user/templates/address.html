@@ -1,0 +1,86 @@
+{% extends 'base-account.html' %}
+{% load static %}
+
+{% block account %}
+
+<div class="col-md-9">
+    <div class="bg-white p-4 shadow-sm">
+      <div class="mb-5 flex justify-between items-center rounded">
+        <div class="row align-items-center">
+            <div class="col">
+                <div class="fw-semibold fs-4">Adresler</div>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-primary">Yeni Adres Ekle</button>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4 mt-4">
+            {% for address in user.addresses.all %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ address.title }}</h5>
+                        <p class="card-text mt-2">{{ address.full_address }}</p>
+                        <form method="post" action="{% url 'delete_address' address.id %}" onsubmit="return confirm('Bu adresi silmek istediğinize emin misiniz?');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <hr class="my-4">
+
+    <div class="bg-white p-4 shadow-sm mt-4" id="addressForm" style="display: none;">
+        <form method="post" action="{% url 'add_address' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="title" class="form-label">Başlık</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Adres</label>
+                <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="city" class="form-label">Şehir</label>
+                <input type="text" class="form-control" id="city" name="city" required>
+            </div>
+            <div class="mb-3">
+                <label for="district" class="form-label">İlçe</label>
+                <input type="text" class="form-control" id="district" name="district" required>
+            </div>
+            <div class="mb-3">
+                <label for="postal_code" class="form-label">Posta Kodu</label>
+                <input type="text" class="form-control" id="postal_code" name="postal_code" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+    </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    function toggleForm() {
+        var form = document.getElementById("addressForm");
+        if (form.style.display === "none" || form.style.display === "") {
+            form.style.display = "block";
+        } else {
+            form.style.display = "none";
+        }
+    }
+
+    document.querySelector(".btn-primary").addEventListener("click", toggleForm);
+});
+</script>
+{% endblock %}
