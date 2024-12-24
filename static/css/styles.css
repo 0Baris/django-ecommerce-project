@@ -202,3 +202,8 @@ html, body {
 .forgot-password:hover {
   text-decoration: underline;
 }
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0; 
+}

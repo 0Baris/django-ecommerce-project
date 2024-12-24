@@ -19,20 +19,19 @@
           </form>
     
           <ul class="navbar-nav flex-row align-items-center mx-4">
-            
             <li class="nav-item dropdown me-4">
-              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                HESAP
+              <a class="nav-link dropdown-toggle text-hover" href="{% if user.is_authenticated %}{% url 'account' %}{% else %}{% url 'login' %}{% endif %}" id="navbarDropdownMenuLink" role="button" aria-expanded="false">
+                  HESAP
               </a>
-              <ul class="dropdown-menu">
-                {% if user.is_authenticated %}
-                    <li><a class="dropdown-item" href="{% url 'logout' %}">Çıkış Yap</a></li>
-                    <li><a class="dropdown-item" href="">Adres</a></li>
-                {% else %}
-                    <li><a class="dropdown-item" href="{% url 'login' %}">Üye Girişi</a></li>
-                    <li><a class="dropdown-item" href="{% url 'register' %}">Kayıt Ol</a></li>
-                {% endif %}
-            </ul>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  {% if user.is_authenticated %}
+                      <li><a class="dropdown-item text-hover" href="#">Adres</a></li>
+                      <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Çıkış Yap</a></li>
+                  {% else %}
+                      <li><a class="dropdown-item text-hover" href="{% url 'login' %}">Üye Girişi</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'register' %}">Kayıt Ol</a></li>
+                  {% endif %}
+              </ul>
             </li>
     
             <li class="nav-item">
@@ -51,6 +50,4 @@
         </div>
       </div>
   </nav>
-
-  
 </div>
