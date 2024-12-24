@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Uygulama varsayılanları
+static/img/slides 
+static/img/products 
+
 # Distribution / packaging
 .Python
 build/
