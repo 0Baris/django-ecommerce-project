@@ -5,6 +5,8 @@
 
 {% block content %}
 
+{% include 'partials/_categories.html' %}
+
 <div class="container my-4">
 
     <nav aria-label="breadcrumb">
@@ -49,8 +51,10 @@
             <div class="mb-3">
                 <div class="d-flex gap-3">
                     <div class="input-group" style="width: 120px;">
-                        <input type="number" class="form-control text-center quantity-input" value="1" min="1" max="{{ product.quantity }}">
+                        <input type="number" class="form-control text-center" value="1"
+                               min="1" max="{{ product.quantity }}" step="1">
                     </div>
+                    
 
                     <button class="btn btn-primary flex-grow-1">
                         <i class="bi bi-cart"></i> SEPETE EKLE
@@ -63,6 +67,9 @@
                 <p>{{ product.description }}</p>
             </div>
         </div>
+    
+        
+    
     </div>
 
 </div>
@@ -78,6 +85,5 @@
         mainImage.src = this.src;
       });
     });
-    
   </script>
 {% endblock %}

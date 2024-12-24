@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+{% include 'partials/_categories.html' %}
+
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center bg-light">
+    <div class="card p-4 shadow" style="max-width: 400px; width: 100%; border-radius: 10px;">
+
+      <div class="d-flex justify-content-center border-bottom pb-3 mb-4">
+        <a href="{% url 'login' %}" class="text-decoration-none text-dark fw-bold mx-2 border-bottom border-primary">Giriş Yap</a>
+        <a href="{% url 'register' %}" class="text-decoration-none text-secondary mx-2">Üye Ol</a>
+      </div>
+  
+      <form action="" method="post">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <label for="loginEmail" class="form-label">E-Posta</label>
+          <input type="email" name="loginEmail" class="form-control" placeholder="E-Posta adresinizi girin" required />
+        </div>
+  
+        <div class="mb-3">
+          <label for="loginPassword" class="form-label">Şifre</label>
+          <input type="password" name="loginPassword" class="form-control" placeholder="Şifrenizi girin" required />
+        </div>
+        
+        <div class="text-end mb-4">
+          <a href="#!" class="text-primary text-decoration-none">Şifremi Unuttum?</a>
+        </div>
+  
+        <button type="submit" class="btn btn-primary w-100">GİRİŞ YAP</button>
+      </form>
+    </div>
+  </div>
+  
+  
+{% endblock %}
