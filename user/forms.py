@@ -31,11 +31,12 @@ class RegisterUserForm(UserCreationForm):
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['title', 'address', 'city', 'district', 'postal_code']
+        fields = ['title', 'address', 'city', 'district', 'postal_code', 'phone_number']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Başlık'}),
             'address': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Adres', 'rows': 3}),
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Şehir'}),
             'district': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'İlçe'}),
             'postal_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Posta Kodu'}),
+            'phone_number': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Telefon Numarası'}),
         }

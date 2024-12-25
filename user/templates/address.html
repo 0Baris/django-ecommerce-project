@@ -14,13 +14,14 @@
                 <button type="button" class="btn btn-primary">Yeni Adres Ekle</button>
             </div>
         </div>
-        <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3 g-4 mt-4">
+        <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
             {% for address in user.addresses.all %}
             <div class="col">
                 <div class="card h-100">
                     <div class="card-body">
                         <h5 class="card-title">{{ address.title }}</h5>
                         <p class="card-text mt-2">{{ address.full_address }}</p>
+                        <p class="card-text mt-2"><strong>Telefon Numarası: {{ address.phone_number }}</strong></p>
                         <form method="post" action="{% url 'delete_address' address.id %}" onsubmit="return confirm('Bu adresi silmek istediğinize emin misiniz?');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger">Sil</button>
@@ -45,17 +46,36 @@
                 <label for="address" class="form-label">Adres</label>
                 <textarea class="form-control" id="address" name="address" rows="3" required></textarea>
             </div>
-            <div class="mb-3">
-                <label for="city" class="form-label">Şehir</label>
-                <input type="text" class="form-control" id="city" name="city" required>
-            </div>
-            <div class="mb-3">
-                <label for="district" class="form-label">İlçe</label>
-                <input type="text" class="form-control" id="district" name="district" required>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="city" class="form-label">Şehir</label>
+                    <select class="form-control" id="city" name="city" required>
+                        <option value="city">Şehir Seçin</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="district" class="form-label">İlçe</label>
+                    <select class="form-control" id="district" name="district" required>
+                        <option value="district">İlçe Seçin</option>
+                    </select>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="postal_code" class="form-label">Posta Kodu</label>
                 <input type="text" class="form-control" id="postal_code" name="postal_code" required>
+            </div>
+            <div class="mb-3">
+                <label for="phone_number" class="form-label">Telefon Numaranız</label>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    id="phone_number" 
+                    name="phone_number" 
+                    required 
+                    maxlength="15" 
+                    pattern="[0-9]{1,15}" 
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                >
             </div>
             <button type="submit" class="btn btn-primary">Kaydet</button>
         </form>
@@ -69,18 +89,42 @@
 {% endblock %}
 
 {% block js %}
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    function toggleForm() {
-        var form = document.getElementById("addressForm");
-        if (form.style.display === "none" || form.style.display === "") {
-            form.style.display = "block";
-        } else {
-            form.style.display = "none";
+    document.addEventListener("DOMContentLoaded", function() {
+        function toggleForm() {
+            var form = document.getElementById("addressForm");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "block";
+            } else {
+                form.style.display = "none";
+            }
         }
-    }
-
-    document.querySelector(".btn-primary").addEventListener("click", toggleForm);
-});
+    
+        document.querySelector(".btn-primary").addEventListener("click", toggleForm);
+    
+        // Fetch and populate cities
+        $.getJSON("https://raw.githubusercontent.com/umut79/dinamik-ililce-json/master/tr-il.json", function(sonuc){
+            $("#city").html("<option>Şehir Seçin</option>");
+            $.each(sonuc, function(index, value){
+                var row = '<option value="'+value.il_adi+'">'+value.il_adi+'</option>';
+                $("#city").append(row);
+            });
+        });
+    
+        // Fetch and populate districts based on selected city
+        $("#city").on("change", function(){
+            var il = $(this).val();
+            $("#district").html("<option>İlçe Seçin</option>");
+            $.getJSON("https://raw.githubusercontent.com/umut79/dinamik-ililce-json/master/tr-ilce.json", function(sonuc){
+                $.each(sonuc, function(index, value){
+                    if(value.il_adi == il) {
+                        var row = '<option value="'+value.ilce_adi+'">'+value.ilce_adi+'</option>';
+                        $("#district").append(row);
+                    }
+                });
+            });
+        });
+    });
 </script>
 {% endblock %}

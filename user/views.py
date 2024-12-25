@@ -66,6 +66,8 @@ def add_address(request):
         if form.is_valid():
             address = form.save(commit=False)
             address.user = request.user
+            address.city = request.POST.get('city')
+            address.district = request.POST.get('district')
             address.save()
             return redirect('adress')
     else:

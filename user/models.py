@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import RegexValidator
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
@@ -22,7 +23,12 @@ class Address(models.Model):
     district = models.CharField(max_length=50)
     postal_code = models.CharField(max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    phone_number = models.CharField(
+        max_length=15,
+        validators=[RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Telefon numarası için kullanılması gereken format: '+999999999'.")],
+        default='+900000000000'
+    )
+
     def __str__(self):
         return f"{self.user.username} - {self.title}"
     

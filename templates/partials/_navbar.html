@@ -25,7 +25,8 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   {% if user.is_authenticated %}
-                      <li><a class="dropdown-item text-hover" href="#">Adres</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'adress' %}">Adres</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'orders' %}">Siparişler</a></li>
                       <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Çıkış Yap</a></li>
                   {% else %}
                       <li><a class="dropdown-item text-hover" href="{% url 'login' %}">Üye Girişi</a></li>
