@@ -69,6 +69,7 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"{self.product.name} Resmi {self.id}"
     
+
 class Comment(models.Model):
     product = models.ForeignKey(Product, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

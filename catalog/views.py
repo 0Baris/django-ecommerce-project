@@ -2,32 +2,31 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Slide, Product, Comment
 from django.core.paginator import Paginator
 from django.db.models import Q
+from order.models import Cart
 
 def home(request):
     search_query = request.GET.get('search', '')
     
-    products = Product.objects.filter(is_active=True)
-    
-    if search_query:
-        products = products.filter(
-            Q(name__icontains=search_query) |
-            Q(description__icontains=search_query)
-        )
-        
-        # Simplified context for search results
-        context = {
-            'categories': Category.objects.all()[1:],
-            'products': products,
-            'search_query': search_query,
-        }
+    if request.user.is_authenticated:
+        user_cart, _ = Cart.objects.get_or_create(user=request.user)
+        cart_items = user_cart.cartitem_set.all()
+        cart_count = sum(item.quantity for item in cart_items)
     else:
-        # Full context for homepage
-        context = {
-            'categories': Category.objects.all()[1:],
-            'slides': Slide.objects.select_related('product').all(),
-            'products': products[:12],  # Limit to 12 products on homepage
-            'search_query': search_query,
-        }
+        cart_items = []
+        cart_count = 0
+
+    products = Product.objects.filter(is_active=True)
+    if search_query:
+        products = products.filter(Q(name__icontains=search_query) | Q(description__icontains=search_query))
+    
+    context = {
+        'categories': Category.objects.all()[1:],
+        'slides': Slide.objects.select_related('product').all(),
+        'products': products[:12],
+        'search_query': search_query,
+        'cart_items': cart_items,
+        'cart_count': cart_count,
+    }
     
     return render(request, 'index.html', context)
 

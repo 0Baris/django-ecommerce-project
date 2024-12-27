@@ -56,9 +56,12 @@
                     </div>
                     
 
-                    <button class="btn btn-primary flex-grow-1">
-                        <i class="bi bi-cart"></i> SEPETE EKLE
-                    </button>
+                    <form method="post" action="{% url 'order:add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-cart"></i> SEPETE EKLE
+                        </button>
+                    </form>
                 </div>
             </div>
 

@@ -24,4 +24,5 @@ urlpatterns = [
     path('', include('catalog.urls')),
     path('account/', include('django.contrib.auth.urls')),
     path('account/', include('user.urls')),
+    path('order/', include('order.urls')),
 ]

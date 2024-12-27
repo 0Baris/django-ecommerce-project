@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib import messages
 from .forms import RegisterUserForm, AddressForm
 from django.contrib.auth.decorators import login_required
-from .models import Address, Order
+from .models import Address
 
 def login_user(request):
     if request.method == "POST":
@@ -77,14 +77,6 @@ def add_address(request):
 @login_required
 def delete_address(request, address_id):
     address = get_object_or_404(Address, id=address_id, user=request.user)
-    if request.method == "POST":
-        address.delete()
-        return redirect('adress')
-    return render(request, 'delete_address.html', {'address': address})
-
-@login_required
-def orders_list(request, order):
-    address = get_object_or_404(Order, id=address_id, user=request.user)
     if request.method == "POST":
         address.delete()
         return redirect('adress')
