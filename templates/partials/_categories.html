@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="d-flex flex-wrap justify-content-center text-hover">
                     {% for kategori in categories %}
-                        <a href="{% url 'category' kategori.slug %}" class="btn"><strong>{{ kategori.name }}</strong></a>
+                        <a href="{% url 'catalog:category' kategori.slug %}" class="btn"><strong>{{ kategori.name }}</strong></a>
                     {% endfor %}
             </div>
         </div>

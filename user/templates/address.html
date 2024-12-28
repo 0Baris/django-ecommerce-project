@@ -22,7 +22,7 @@
                         <h5 class="card-title">{{ address.title }}</h5>
                         <p class="card-text mt-2">{{ address.full_address }}</p>
                         <p class="card-text mt-2"><strong>Telefon Numarası: {{ address.phone_number }}</strong></p>
-                        <form method="post" action="{% url 'delete_address' address.id %}" onsubmit="return confirm('Bu adresi silmek istediğinize emin misiniz?');">
+                        <form method="post" action="{% url 'user:delete_address' address.id %}" onsubmit="return confirm('Bu adresi silmek istediğinize emin misiniz?');">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger">Sil</button>
                         </form>
@@ -36,7 +36,7 @@
     <hr class="my-4">
 
     <div class="bg-white p-4 shadow-sm mt-4" id="addressForm" style="display: none;">
-        <form method="post" action="{% url 'add_address' %}">
+        <form method="post" action="{% url 'user:add_address' %}">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="title" class="form-label">Başlık</label>

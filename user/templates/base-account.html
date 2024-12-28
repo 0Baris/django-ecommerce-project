@@ -3,22 +3,25 @@
 
 {% block content %}
 
+{% include 'partials/_categories.html' %}
+{% include 'partials/_info-bar.html' %}
+
 <div class="container my-4">
     <div class="row g-4">
       <div class="col-md-3">
         <h1 class="mb-4 fw-bold fs-2 text-center text-md-start">Hesabım</h1>
         <div class="d-flex flex-md-column overflow-auto">
-          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 text-dark" href="{% url 'account' %}">
+          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 text-dark" href="{% url 'user:account' %}">
               <img src="{% static 'img/person-circle.webp' %}" width="24" height="24" alt="Hesap" class="flex-shrink-0">
               <div class="ms-3">Hesap Bilgilerim</div>
           </a>
 
-          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 text-dark" href="{% url 'orders' %}">
+          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 text-dark" href="{% url 'user:orders' %}">
               <img src="{% static 'img/booking.webp' %}" width="24" height="24" alt="Siparişler" class="flex-shrink-0">
               <div class="ms-3">Siparişlerim</div>
           </a>
 
-          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 text-dark" href="{% url 'adress' %}">
+          <a class="d-flex align-items-center text-decoration-none mx-3 mx-md-0 py-3 text-dark" href="{% url 'user:adress' %}">
               <img src="{% static 'img/adress.webp' %}" width="24" height="24" alt="Adresler" class="flex-shrink-0">
               <div class="ms-3">Adreslerim</div>
           </a>

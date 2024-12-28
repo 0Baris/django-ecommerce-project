@@ -18,6 +18,15 @@
           <li><a href="https://goo.gl/maps/example" class="text-light text-decoration-none text-hover">Adres</a></li>
         </ul>
       </div>
+
+      <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+        <h5 class="text-uppercase text-light">Kategoriler</h5>
+        <ul class="list-unstyled mb-0">
+          {% for kategori in categories %}
+          <li><a href="{% url 'catalog:category' kategori.slug %}" class="text-light text-decoration-none text-hover">{{ kategori.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 

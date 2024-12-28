@@ -21,6 +21,16 @@
         {% block content %}
         {% endblock %}
 
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="cartOffcanvasLabel">Sepet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body" id="cart-content">
+                {% include 'cart.html' %}
+            </div>
+        </div>
+
         {% if messages %}
         <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 11;">
             {% for message in messages %}
@@ -38,8 +48,8 @@
     
 
         {% block js %}  
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        {% endblock %}
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 var toastElList = [].slice.call(document.querySelectorAll('.toast'))
@@ -48,8 +58,41 @@
                 });
                 toastList.forEach(toast => toast.show());
             });
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.has('show_cart')) {
+                    let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+                    offcanvas.show();
+                }
+            });
+        
+            function updateCart(action, itemId) {
+                const url = `/order/cart/${action}/${itemId}/`;
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('cart-content').innerHTML = data.cart_html;
+                        let offcanvasElement = document.getElementById('cartOffcanvas');
+                        let offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
+                        if (!offcanvas) {
+                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
+                        }
+                        offcanvas.show();
+                        showToast(data.message, 'success');
+                    } else if (data.status === 'error') {
+                        showToast(data.message, 'danger');
+                    }
+                });
+            }
         </script>
-        {% endblock %}
 
         {% include 'partials/_footer.html' %}
         

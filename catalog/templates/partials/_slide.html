@@ -12,7 +12,7 @@
   <div class="carousel-inner">
     {% for slide in slides %}
     <div class="carousel-item {% if forloop.first %}active{% endif %}">  
-      <a href="{% url 'product' slide.product.slug %}">
+      <a href="{% url 'catalog:product' slide.product.slug %}">
         <img src="{{ slide.image }}" class="d-block w-100" alt="{{ slide.name }}">
       </a>
     </div>

@@ -7,11 +7,11 @@
     
         <div class="d-flex justify-content-center align-items-center w-100">
     
-          <a class="navbar-brand fw-bold mx-4" href="{% url 'index' %}" style="color: #223993; white-space: nowrap;">
+          <a class="navbar-brand fw-bold mx-4" href="{% url 'catalog:index' %}" style="color: #223993; white-space: nowrap;">
             <span style="color: black;">ecommerce</span>
           </a>
     
-          <form class="d-flex flex-grow-1 mx-4" role="search" style="max-width: 500px;" action="{% url 'index' %}">
+          <form class="d-flex flex-grow-1 mx-4" role="search" style="max-width: 500px;" action="{% url 'catalog:index' %}">
             <div class="input-group">
               <input class="form-control" type="search" placeholder="150+'den fazla üründen ara" aria-label="Search" name="search">
               <button class="btn btn-secondary" type="submit">ARA</button>
@@ -20,17 +20,17 @@
     
           <ul class="navbar-nav flex-row align-items-center mx-4">
             <li class="nav-item dropdown me-4">
-              <a class="nav-link dropdown-toggle text-hover" href="{% if user.is_authenticated %}{% url 'account' %}{% else %}{% url 'login' %}{% endif %}" id="navbarDropdownMenuLink" role="button" aria-expanded="false">
+              <a class="nav-link dropdown-toggle text-hover" href="{% if user.is_authenticated %}{% url 'user:account' %}{% else %}{% url 'user:login' %}{% endif %}" id="navbarDropdownMenuLink" role="button" aria-expanded="false">
                   HESAP
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   {% if user.is_authenticated %}
-                      <li><a class="dropdown-item text-hover" href="{% url 'adress' %}">Adres</a></li>
-                      <li><a class="dropdown-item text-hover" href="{% url 'orders' %}">Siparişler</a></li>
-                      <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Çıkış Yap</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'user:adress' %}">Adres</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'user:orders' %}">Siparişler</a></li>
+                      <li><a class="dropdown-item text-danger" href="{% url 'user:logout' %}">Çıkış Yap</a></li>
                   {% else %}
-                      <li><a class="dropdown-item text-hover" href="{% url 'login' %}">Üye Girişi</a></li>
-                      <li><a class="dropdown-item text-hover" href="{% url 'register' %}">Kayıt Ol</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'user:login' %}">Üye Girişi</a></li>
+                      <li><a class="dropdown-item text-hover" href="{% url 'user:register' %}">Kayıt Ol</a></li>
                   {% endif %}
               </ul>
             </li>
@@ -53,9 +53,6 @@
         </div>
       </div>
   </nav>
-
-  {% include 'cart.html' %}
-
 
 </div>
 

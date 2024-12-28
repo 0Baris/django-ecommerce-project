@@ -12,7 +12,7 @@ def login_user(request):
         user = authenticate(request, username=email, password=passw)
         if user is not None:
             login(request, user)
-            return redirect('index')
+            return redirect('catalog:index')
         else:
             messages.success(request, ("Giriş Sağlanamadı, Lütfen Tekrar Deneyin."))
             return redirect('login')
@@ -20,7 +20,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
-    return redirect('index')
+    return redirect('catalog:index')
 
 def register_user(request):
     if request.method == "POST":
@@ -37,15 +37,12 @@ def register_user(request):
             backend = 'user.backends.EmailBackend'
             login(request, user, backend=backend)
             messages.success(request, "Kayıt başarılı!")
-            return redirect('index')
+            return redirect('catalog:index')
         else:
             messages.error(request, "Lütfen formu doğru doldurunuz.")
     else:
         form = RegisterUserForm()
     return render(request, 'register.html', {'form': form})
-
-def terms(request):
-    return render(request, 'terms.html')
 
 @login_required
 def account(request):

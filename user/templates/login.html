@@ -5,13 +5,14 @@
 {% block content %}
 
 {% include 'partials/_categories.html' %}
+{% include 'partials/_info-bar.html' %}
 
 <div class="container-fluid vh-100 d-flex justify-content-center align-items-center bg-light">
     <div class="card p-4 shadow" style="max-width: 400px; width: 100%; border-radius: 10px;">
 
       <div class="d-flex justify-content-center border-bottom pb-3 mb-4">
-        <a href="{% url 'login' %}" class="text-decoration-none text-dark fw-bold mx-2 border-bottom border-primary">Giriş Yap</a>
-        <a href="{% url 'register' %}" class="text-decoration-none text-secondary mx-2">Üye Ol</a>
+        <a href="{% url 'user:login' %}" class="text-decoration-none text-dark fw-bold mx-2 border-bottom border-primary">Giriş Yap</a>
+        <a href="{% url 'user:register' %}" class="text-decoration-none text-secondary mx-2">Üye Ol</a>
       </div>
   
       <form action="" method="post">

@@ -6,16 +6,17 @@
 {% block content %}
 
 {% include 'partials/_categories.html' %}
+{% include 'partials/_info-bar.html' %}
 
 <div class="container my-4">
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{% url 'index' %}">Anasayfa</a>
+                <a href="{% url 'catalog:index' %}">Anasayfa</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{% url 'category' product.category.slug %}">{{ product.category.name }}</a>
+                <a href="{% url 'catalog:category' product.category.slug %}">{{ product.category.name }}</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
         </ol>
@@ -55,13 +56,20 @@
                                min="1" max="{{ product.quantity }}" step="1">
                     </div>
                     
-
-                    <form method="post" action="{% url 'order:add_to_cart' product.id %}">
+                {% if user.is_authenticated %}
+                    <form id="add-to-cart-form" method="post" action="{% url 'order:add_to_cart' product.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary flex-grow-1">
+                        <button type="submit" class="btn btn-primary">
                             <i class="bi bi-cart"></i> SEPETE EKLE
                         </button>
                     </form>
+                {% else %}
+                    <form method="get" action="{% url 'login' %}">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-cart"></i> GİRİŞ YAP
+                        </button>
+                    </form>
+                {% endif %}
                 </div>
             </div>
 
@@ -80,13 +88,36 @@
 {% include 'partials/_best_sellers.html' %}
 
 {% endblock %}
+
 {% block js %}
-  <script>
-    document.querySelectorAll('.thumbnail').forEach(thumbnail => {
-      thumbnail.addEventListener('click', function () {
-        const mainImage = document.getElementById('main-product-image');
-        mainImage.src = this.src;
-      });
-    });
-  </script>
+<script>
+document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const url = this.action;
+  const formData = new FormData(this);
+
+  fetch(url, {
+    method: 'POST',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === 'success') {
+      document.getElementById('cart-content').innerHTML = data.cart_html;
+      let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
+      offcanvas.show();
+    }
+  })
+  .catch(console.error);
+});
+
+document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+  thumbnail.addEventListener('click', function () {
+    const mainImage = document.getElementById('main-product-image');
+    mainImage.src = this.src;
+  });
+});
+</script>
 {% endblock %}

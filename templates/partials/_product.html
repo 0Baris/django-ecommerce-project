@@ -4,7 +4,7 @@
             <div class="row">
               
             {% for pdt in products %}
-                <a href="{% url 'product' pdt.slug %}" class="card me-3 card-no-border" style="width: 12rem">
+                <a href="{% url 'catalog:product' pdt.slug %}" class="card me-3 card-no-border" style="width: 12rem">
                   <img
                     src="{{ pdt.image.url }}"
                     class="bd-placeholder-img card-img-top"

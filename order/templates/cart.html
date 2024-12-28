@@ -1,53 +1,43 @@
-<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="cartOffcanvasLabel">Sepet</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body" id="cart-content">
-        {% if cart_items %}
-        <div class="list-group list-group-flush">
-            {% for item in cart_items %}
-            <div class="list-group-item border-bottom py-3 px-0">
-                <div class="d-flex gap-3">
-                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" 
-                         class="rounded" style="width: 80px; height: 80px; object-fit: cover;">
-                    <div class="flex-grow-1">
-                        <h6 class="mb-1">{{ item.product.name }}</h6>
-                        <p class="mb-2 fw-bold">{{ item.product.price }} TL</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group btn-group-sm shadow-sm">
-                                <a href="{% url 'order:decrease_quantity' item_id=item.id %}" 
-                                   class="btn btn-light">-</a>
-                                <span class="btn btn-light disabled">{{ item.quantity }}</span>
-                                <a href="{% url 'order:increase_quantity' item_id=item.id %}" 
-                                   class="btn btn-light">+</a>
-                            </div>
-                            <a href="{% url 'order:remove_from_cart' item_id=item.id %}" 
-                               class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash">Sil</i>
-                            </a>
-                        </div>
+{% if cart_items %}
+<div class="list-group list-group-flush">
+    {% for item in cart_items %}
+    <div class="list-group-item border-bottom py-3 px-0">
+        <div class="d-flex gap-3">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" 
+                 class="rounded" style="width: 80px; height: 80px; object-fit: cover;">
+            <div class="flex-grow-1">
+                <h6 class="mb-1">{{ item.product.name }}</h6>
+                <p class="mb-2 fw-bold">{{ item.product.price }} TL</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group btn-group-sm shadow-sm">
+                        <button class="btn btn-light" onclick="updateCart('decrease', {{ item.id }})">-</button>
+                        <span class="btn btn-light disabled">{{ item.quantity }}</span>
+                        <button class="btn btn-light" onclick="updateCart('increase', {{ item.id }})">+</button>
                     </div>
+                    <button class="btn btn-sm btn-outline-danger" onclick="updateCart('remove', {{ item.id }})">
+                        <i class="bi bi-trash">Sil</i>
+                    </button>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        <div class="border-top mt-3 pt-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="h5 mb-0">Toplam:</span>
-                <span class="h5 mb-0">{{ total_price }} TL</span>
-            </div>
-            <div class="d-grid gap-2">
-                <a href="{% url 'index' %}" class="btn btn-outline-primary">Alışverişe Devam Et</a>
-                <a href="#" class="btn btn-success">Ödemeye Geç</a>
-            </div>
-        </div>
-        {% else %}
-        <div class="text-center py-5">
-            <i class="bi bi-cart3 display-1 text-muted mb-3"></i>
-            <p class="lead mb-4">Sepetinizde ürün bulunmamaktadır.</p>
-            <a href="{% url 'index' %}" class="btn btn-primary">Alışverişe Başla</a>
-        </div>
-        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+<div class="border-top mt-3 pt-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="h5 mb-0">Toplam:</span>
+        <span class="h5 mb-0">{{ total_price }} TL</span>
+    </div>
+    <div class="d-grid gap-2">
+        <a href="{% url 'catalog:index' %}" class="btn btn-outline-primary">Alışverişe Devam Et</a>
+        <a href="#" class="btn btn-success">Ödemeye Geç</a>
     </div>
 </div>
+{% else %}
+<div class="text-center py-5">
+    <i class="bi bi-cart3 display-1 text-muted mb-3"></i>
+    <p class="lead mb-4">Sepetinizde ürün bulunmamaktadır.</p>
+    <a href="{% url 'catalog:index' %}" class="btn btn-primary">Alışverişe Başla</a>
+</div>
+{% endif %}
+
