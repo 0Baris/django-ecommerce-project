@@ -79,24 +79,29 @@ padding: 0 8px;
 }
 
 .product-image-frame {
-border: 2px solid #ddd;
-border-radius: 4px;
-padding: 2px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 2px;
 }
 
 .product-image-frame:hover {
-border-color: #007bff;
+  border-color: #007bff;
 }
 
 .main-image {
-max-height: 400px;
-width: auto;
-object-fit: contain;
+  max-height: 400px;
+  width: auto;
+  object-fit: contain;
 }
 
 .thumbnail-image {
-object-fit: cover;
+  object-fit: cover;
 }
+
+.product-image-frame.active-thumbnail {
+  border-color: #007bff;
+}
+
 
 #button-decrement,
 #button-increment {

@@ -31,20 +31,8 @@
             </div>
         </div>
 
-        {% if messages %}
-        <div class="toast-container position-fixed bottom-0 start-0 p-3" style="z-index: 11;">
-            {% for message in messages %}
-            <div class="toast align-items-center bg-{{ message.tags }} text-white border-0 mb-2" role="alert" aria-live="assertive" aria-atomic="true">
-                <div class="d-flex">
-                    <div class="toast-body">
-                        {{ message }}
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+        {% include 'partials/_messages.html' %}
+      
     
 
         {% block js %}  
@@ -66,7 +54,7 @@
                     offcanvas.show();
                 }
             });
-        
+
             function updateCart(action, itemId) {
                 const url = `/order/cart/${action}/${itemId}/`;
                 fetch(url, {
@@ -76,22 +64,74 @@
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 })
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
                     if (data.status === 'success') {
                         document.getElementById('cart-content').innerHTML = data.cart_html;
-                        let offcanvasElement = document.getElementById('cartOffcanvas');
-                        let offcanvas = bootstrap.Offcanvas.getInstance(offcanvasElement);
-                        if (!offcanvas) {
-                            offcanvas = new bootstrap.Offcanvas(offcanvasElement);
-                        }
-                        offcanvas.show();
-                        showToast(data.message, 'success');
+                        updateMessages(data.messages_html);
                     } else if (data.status === 'error') {
-                        showToast(data.message, 'danger');
+                        updateMessages(data.messages_html);
                     }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+
+            function applyDiscount() {
+                const discountForm = document.getElementById('discount-form');
+                discountForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const formData = new FormData(discountForm);
+                    fetch('/order/apply_discount/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            document.getElementById('cart-content').innerHTML = data.cart_html;
+                            updateMessages(data.messages_html);
+                        } else if (data.status === 'error') {
+                            updateMessages(data.messages_html);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
                 });
             }
+            
+
+
+            function updateMessages(messagesHtml) {
+                const existingToasts = document.querySelectorAll('.toast-container');
+                existingToasts.forEach(toast => toast.remove());
+                
+                document.body.insertAdjacentHTML('beforeend', messagesHtml);
+                
+                initToasts();
+            }
+
+            function initToasts() {
+                const toastElList = document.querySelectorAll('.toast');
+                toastElList.forEach(toastEl => {
+                    const toast = new bootstrap.Toast(toastEl, { 
+                        delay: 5000,
+                        autohide: true
+                    });
+                    toast.show();
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                initToasts();
+            });
+
+
+            applyDiscount();
+
+
         </script>
 
         {% include 'partials/_footer.html' %}

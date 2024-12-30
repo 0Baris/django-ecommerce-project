@@ -8,6 +8,7 @@ class User(AbstractUser):
     surname = models.CharField(max_length=50, default='Default Surname')
     phone = models.CharField(max_length=15, blank=True, null=True)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    discount_code = models.ForeignKey('order.DiscountCode', null=True, blank=True, on_delete=models.SET_NULL)  # Yeni alan
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'surname']
@@ -15,6 +16,13 @@ class User(AbstractUser):
     def __str__(self):
         return self.email
     
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    discount_code = models.ForeignKey('order.DiscountCode', null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.user.email
+
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='addresses')
     title = models.CharField(max_length=100)
