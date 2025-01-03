@@ -2,22 +2,37 @@
 
 <div id="carouselExampleIndicators" class="carousel slide">
   
-  <div class="carousel-indicators">
-    {% for slide in slides %}
-      <button type="button" data-bs-target="#carouselExampleIndicators" 
-      data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="{{ slide.isim }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
-    {% endfor %}
-  </div>
-  
-  <div class="carousel-inner">
-    {% for slide in slides %}
-    <div class="carousel-item {% if forloop.first %}active{% endif %}">  
-      <a href="{% url 'catalog:product' slide.product.slug %}">
-        <img src="{{ slide.image }}" class="d-block w-100" alt="{{ slide.name }}">
-      </a>
+  {% if slides %}
+    <div class="carousel-indicators">
+      {% for slide in slides %}
+        <button type="button" data-bs-target="#carouselExampleIndicators" 
+        data-bs-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}" aria-label="{{ slide.isim }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}"></button>
+      {% endfor %}
     </div>
-    {% endfor %}
-  </div>
+    
+    <div class="carousel-inner">
+      {% for slide in slides %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">  
+        <a href="{% url 'catalog:product' slide.product.slug %}">
+          <img src="{{ slide.image }}" class="d-block w-100" alt="{{ slide.name }}">
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" 
+      data-bs-slide-to="0" class="active" aria-label="Default Slide" aria-current="true"></button>
+    </div>
+    
+    <div class="carousel-inner">
+      <div class="carousel-item active">  
+      <a href="{% url 'catalog:index' %}">
+        <img src="{% static 'img/base-slide.png' %}" class="d-block w-100" alt="Default Slide">
+      </a>
+      </div>
+    </div>
+  {% endif %}
 
 
 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

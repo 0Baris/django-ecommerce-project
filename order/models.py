@@ -55,7 +55,14 @@ class Order(models.Model):
     )
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Added default
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    discount_code = models.ForeignKey(
+        DiscountCode,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='orders'
+    )
 
     def __str__(self):
         return f"Sipariş/ ID:{self.id} , Satın Alan:{self.user.email}"

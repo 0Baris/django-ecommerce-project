@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import RegisterUserForm, AddressForm
 from django.contrib.auth.decorators import login_required
 from .models import Address
+from order.models import Order
 
 def login_user(request):
     if request.method == "POST":
@@ -50,7 +51,10 @@ def account(request):
 
 @login_required
 def orders(request):
-    return render(request, 'orders.html', {'user': request.user})
+    user_orders = Order.objects.filter(user=request.user).order_by('-order_date')
+    if not user_orders.exists():
+        messages.info(request, "Henüz siparişiniz bulunmamaktadır.")
+    return render(request, 'orders.html', {'user': request.user, 'orders': user_orders})
 
 @login_required
 def adress(request):

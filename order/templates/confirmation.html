@@ -7,7 +7,7 @@
             <h4 class="alert-heading">Siparişiniz Başarıyla Tamamlandı!</h4>
             <p>Teşekkür ederiz, {{ order.user.username }}. Siparişiniz başarıyla alındı.</p>
             <hr>
-            <p class="mb-0">Sipariş Detaylarınız için <a href="{% url 'catalog:index' %}">buraya tıklayın</a>.</p>
+            <p class="mb-0">Sipariş Detaylarınız için <a href="{% url 'user:orders' %}">buraya tıklayın</a>.</p>
         </div>
         <a href="{% url 'catalog:index' %}" class="btn btn-success">Sepete Geri Dön</a>
     </div>
