@@ -1,0 +1,14 @@
+{% extends "checkout.html" %}
+
+{% block checkout_content %}
+    <div class="container mt-5">
+        <h2>Checkout - Onaylama</h2>
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Siparişiniz Başarıyla Tamamlandı!</h4>
+            <p>Teşekkür ederiz, {{ order.user.username }}. Siparişiniz başarıyla alındı.</p>
+            <hr>
+            <p class="mb-0">Sipariş Detaylarınız için <a href="{% url 'catalog:index' %}">buraya tıklayın</a>.</p>
+        </div>
+        <a href="{% url 'catalog:index' %}" class="btn btn-success">Sepete Geri Dön</a>
+    </div>
+{% endblock %}

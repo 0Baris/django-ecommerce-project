@@ -3,23 +3,23 @@
         <div class="col-14">
             <div class="row">
               
-            {% for pdt in products %}
-                <a href="{% url 'catalog:product' pdt.slug %}" class="card me-3 card-no-border" style="width: 12rem">
-                  <img
-                    src="{{ pdt.image.url }}"
-                    class="bd-placeholder-img card-img-top"
-                    width="100%"
-                    height="140"
-                    alt="{{ pdt.name }}"
-                    loading="lazy"
-                  >
-                </img>
-                <div class="card-body text-2xl text-center">
-                  <h5 class="card-title fw-bold">{{ pdt.name }}</h5>
-                  <p class="card-text text-grey">{{ pdt.mini_desc }}</p>
-                  <p class="card-text text-2xl fw-bold"><strong>{{ pdt.price }} TL</strong></p>
-                </div>
-              </a>
+            {% for pdt in products %} 
+                  <a href="{% url 'catalog:product' pdt.slug %}" class="card me-3 card-no-border" style="width: 12rem">
+                    <img
+                      src="{{ pdt.image.url }}"
+                      class="bd-placeholder-img card-img-top"
+                      width="100%"
+                      height="140"
+                      alt="{{ pdt.name }}"
+                      loading="lazy"
+                    >
+                  </img>
+                  <div class="card-body text-2xl text-center">
+                    <h5 class="card-title fw-bold">{{ pdt.name }}</h5>
+                    <p class="card-text text-grey">{{ pdt.mini_desc }}</p>
+                    <p class="card-text text-2xl fw-bold"><strong>{{ pdt.price }} TL</strong></p>
+                  </div>
+                </a>
             {% endfor %}
   
             </div>

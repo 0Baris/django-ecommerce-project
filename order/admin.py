@@ -3,9 +3,9 @@ from .models import DiscountCode, Cart, CartItem, Order, OrderItem
 
 @admin.register(DiscountCode)
 class DiscountCodeAdmin(admin.ModelAdmin):
-    list_display = ('code', 'discount', 'active', 'created_at', 'updated_at')
+    list_display = ('code', 'usage', 'usage_fee' , 'discount', 'active', 'created_at', 'updated_at')
     search_fields = ('code',)
-    list_filter = ('active',)
+    list_filter = ('active','usage', 'usage_fee',)
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
@@ -26,6 +26,10 @@ class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
     readonly_fields = ('get_total_price',)
+
+    def get_total_price(self, obj):
+        return obj.quantity * obj.price if obj.quantity and obj.price else 0
+    get_total_price.short_description = 'Total Price'
     can_delete = True
 
 @admin.register(Order)

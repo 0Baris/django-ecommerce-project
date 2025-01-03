@@ -26,15 +26,19 @@
 
 <div class="bg-light p-3 shadow ">
     {% if request.session.discount_code %}
-        <div class="alert alert-success mb-4" role="alert">
-            <strong>Kullanılan Kod:</strong> {{ request.session.discount_code }}
+    <div class="alert alert-success mb-4" role="alert">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <strong>Kullanılan Kod:</strong> {{ request.session.discount_code }}
+            </div>
         </div>
+    </div>
     {% endif %}
     <div class="d-flex align-items-center justify-content-between mb-2 small">
 
         <form id="discount-form" method="post" action="{% url 'order:apply_discount' %}" class="d-flex align-items-center" style="display: none;">
             {% csrf_token %}
-            <input type="text" class="form-control form-control-sm me-2" name="discount_code" placeholder="İndirim Kodu" value="{% if request.session.discount_code %}{{ request.session.discount_code }}{% endif %}">
+            <input type="text" class="form-control form-control-sm me-2" name="discount_code" placeholder="İndirim Kodu">
             <button class="btn btn-primary" type="submit" style="padding: 0.40rem 0.5rem; font-size: 0.75rem;">
                 Uygula
             </button>
@@ -49,7 +53,7 @@
     </div>
     <div id="discount-message" class="small text-muted mb-2"></div>
     <div class="d-grid gap-2">
-        <a href="#" class="btn btn-success">Ödemeye Geç</a>
+        <a href="{% url 'order:checkout' %}" class="btn btn-success">Ödemeye Geç</a>
     </div>
 </div>
 

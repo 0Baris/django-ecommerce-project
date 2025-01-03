@@ -1,0 +1,21 @@
+{% extends "checkout.html" %}
+
+{% block checkout_content %}
+<div class="container mt-5">
+    <h2>Checkout - Ödeme</h2>
+    <form method="post" action="{% url 'order:checkout' %}?id={{ order.id }}&step=payment">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="payment_method" class="form-label">Ödeme Yöntemi</label>
+            <select name="payment_method" id="payment_method" class="form-select" required>
+                <option value="credit_card">Kredi Kartı</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank_transfer">Banka Havalesi</option>
+                <!-- Diğer ödeme yöntemlerini ekleyin -->
+            </select>
+        </div>
+        <!-- Ödeme yöntemi seçimine bağlı olarak ek alanlar ekleyebilirsiniz -->
+        <button type="submit" class="btn btn-primary">Onayla</button>
+    </form>
+</div>
+{% endblock %}

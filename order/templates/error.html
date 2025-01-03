@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Checkout - Hata</h2>
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Bir Hata Oluştu!</h4>
+        <p>{{ message }}</p>
+        <hr>
+        <p class="mb-0">Lütfen <a href="{% url 'catalog:index' %}">sepetinize</a> geri dönün ve tekrar deneyin.</p>
+    </div>
+    <a href="{% url 'catalog:index' %}" class="btn btn-danger">Sepete Geri Dön</a>
+</div>
+{% endblock %}

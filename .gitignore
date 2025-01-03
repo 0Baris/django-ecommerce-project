@@ -9,6 +9,7 @@ __pycache__/
 # Uygulama varsayılanları
 static/img/slides 
 static/img/products 
+TODO
 
 # Distribution / packaging
 .Python

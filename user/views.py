@@ -15,7 +15,7 @@ def login_user(request):
             return redirect('catalog:index')
         else:
             messages.success(request, ("Giriş Sağlanamadı, Lütfen Tekrar Deneyin."))
-            return redirect('login')
+            return redirect('user:login')
     return render(request, 'login.html')
 
 def logout_user(request):
@@ -66,7 +66,7 @@ def add_address(request):
             address.city = request.POST.get('city')
             address.district = request.POST.get('district')
             address.save()
-            return redirect('adress')
+            return redirect('user:adress')
     else:
         form = AddressForm()
     return render(request, 'address.html', {'form': form})
@@ -76,5 +76,5 @@ def delete_address(request, address_id):
     address = get_object_or_404(Address, id=address_id, user=request.user)
     if request.method == "POST":
         address.delete()
-        return redirect('adress')
+        return redirect('user:adress')
     return render(request, 'delete_address.html', {'address': address})

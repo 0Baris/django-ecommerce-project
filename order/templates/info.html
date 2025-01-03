@@ -1,0 +1,26 @@
+{% extends "checkout.html" %}
+
+{% block checkout_content %}
+<div class="container mt-5">
+    <h2>Bilgiler</h2>
+    <form method="post" action="{% url 'order:checkout' %}?id={{ order.id }}&step=info">
+        {% csrf_token %}
+            {% if user.addresses.exists %}
+                <div class="mb-3">
+                    <label for="address" class="form-label">Teslimat Adresi</label>
+                    <select name="address_id" id="address" class="form-select" required>
+                        {% for address in user.addresses.all %}
+                            <option value="{{ address.id }}">{{ address }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% else %}
+                <div class="mb-3 d-flex align-items-center">
+                    <p>Adresiniz bulunmamaktadır. Lütfen yeni bir adres ekleyin.</p>
+                    <a href="{% url 'user:adress' %}" class="btn btn-secondary">Yeni Adres Ekle</a>
+                </div>
+            {% endif %}
+        <button type="submit" class="btn btn-primary">Sonraki Adım</button>
+    </form>
+</div>
+{% endblock %}

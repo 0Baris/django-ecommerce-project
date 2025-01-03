@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-from .models import Cart, CartItem, DiscountCode
+from .models import Cart, CartItem, DiscountCode, Order
 from catalog.models import Product
 from django.http import JsonResponse
 from django.template.loader import render_to_string
@@ -206,3 +206,65 @@ def remove_from_cart(request, item_id):
         'messages_html': rendered_messages
     })
 
+@login_required
+def checkout(request):
+    order_id = request.GET.get('id')
+    step = request.GET.get('step', 'info')
+
+    if not order_id:
+        new_order = Order.objects.create(user=request.user)
+        checkout_url = reverse('order:checkout') + f'?id={new_order.id}&step=info'
+        return redirect(checkout_url)
+
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if step == 'info':
+        if request.method == 'POST':
+            address = request.POST.get('address')
+            order.address = address
+            order.save()
+            return redirect(reverse('order:checkout') + f'?id={order.id}&step=payment')
+        return render(request, 'info.html', {'order': order})
+
+    elif step == 'payment':
+        if request.method == 'POST':
+            payment_method = request.POST.get('payment_method')
+            order.payment_method = payment_method
+            order.save()
+            return redirect(reverse('order:checkout') + f'?id={order.id}&step=confirmation')
+        return render(request, 'payment.html', {'order': order})
+
+    elif step == 'confirmation':
+        user_cart = get_object_or_404(Cart, user=request.user)
+        total_amount = calculate_total_price(user_cart)
+        order.total_amount = total_amount
+        order.save()
+
+        for cart_item in user_cart.cartitem_set.all():
+            product = cart_item.product
+            product.stock_quantity -= cart_item.quantity
+            product.save()
+
+            order.items.create(product=product.name, quantity=cart_item.quantity, price=product.price)
+
+        if user_cart.discount_code:
+            discount_code = user_cart.discount_code
+            discount_code.usage += 1
+            discount_amount = sum(int(item.product.price) * item.quantity for item in user_cart.cartitem_set.all()) * (Decimal(discount_code.discount) / Decimal('100'))
+            discount_code.usage_fee += discount_amount
+            discount_code.save()    
+
+        request.session.pop('total_price', None)
+        request.session.pop('discount_code', None)
+
+        user_cart.discount_code = None
+        user_cart.save()
+
+
+
+        user_cart.cartitem_set.all().delete()
+        user_cart.save()
+        return render(request, 'confirmation.html', {'order': order})
+
+    else:
+        return render(request, 'error.html', {'message': 'Invalid checkout step.'})

@@ -37,8 +37,9 @@ class Address(models.Model):
         default='+900000000000'
     )
 
-    def __str__(self):
-        return f"{self.user.username} - {self.title}"
-    
     def full_address(self):
         return f"{self.address}, {self.district}, {self.city}, {self.postal_code}"
+    
+    def __str__(self):
+        return f"{self.title} - {self.address}, {self.district}, {self.city}"
+    
