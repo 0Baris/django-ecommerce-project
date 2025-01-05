@@ -10,6 +10,7 @@ __pycache__/
 static/img/slides 
 static/img/products 
 TODO
+staticfiles
 
 # Distribution / packaging
 .Python

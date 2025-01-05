@@ -1,6 +1,8 @@
 from order.models import Cart
 from catalog.models import Category
 
+### Tüm sayfalarda kategori ve sepeti görüntülemek için fonksiyonları içerir.
+
 def cart_context(request):
     if request.user.is_authenticated:
         user_cart, _ = Cart.objects.get_or_create(user=request.user)

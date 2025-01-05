@@ -40,11 +40,12 @@
         {% include 'partials/_messages.html' %}
       
     
-
-        {% block js %}  
-
-        {% endblock %}
         <script>
+            
+            {% block js %}  
+
+            {% endblock %}
+
             document.addEventListener('DOMContentLoaded', function () {
                 var toastElList = [].slice.call(document.querySelectorAll('.toast'))
                 var toastList = toastElList.map(function (toastEl) {
@@ -134,7 +135,6 @@
                 initToasts();
                 applyDiscount();
             });
-
 
         </script>
 

@@ -25,15 +25,17 @@
 </div>
 
 <div class="bg-light p-3 shadow ">
+    
     {% if request.session.discount_code %}
-    <div class="alert alert-success mb-4" role="alert">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <strong>Kullanılan Kod:</strong> {{ request.session.discount_code }}
+        <div class="alert alert-success mb-4" role="alert">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>Kullanılan Kod:</strong> {{ request.session.discount_code }}
+                </div>
             </div>
         </div>
-    </div>
     {% endif %}
+
     <div class="d-flex align-items-center justify-content-between mb-2 small">
 
         <form id="discount-form" method="post" action="{% url 'order:apply_discount' %}" class="d-flex align-items-center" style="display: none;">

@@ -4,6 +4,8 @@ from django.core.validators import RegexValidator
 from user.models import Address
 import uuid
 
+
+## İndirim Kodu için kullanılan model.
 class DiscountCode(models.Model):
     code = models.CharField(max_length=50, unique=True)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
@@ -14,24 +16,26 @@ class DiscountCode(models.Model):
     usage_fee = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
     def __str__(self):
-        return f"Kod: {self.code}, Komisyon Tutarı: {self.usage_fee} ve Kullanım: {self.usage}"
+        return self.code
 
-
+## Alışveriş Sepeti için kullanılan model.
 class Cart(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     discount_code = models.ForeignKey(DiscountCode, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"Cart for {self.user.username}"
-
+    
+## Alışveriş sepetindeki ÜRÜNLER için kullanılan model.
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey('catalog.Product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
-        return self.product.productName
+        return self.product.name
 
+## Sipariş için kullanılan model.
 class Order(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Sipariş Alındı'),
@@ -40,8 +44,8 @@ class Order(models.Model):
         ('Delivered', 'Teslim Edildi'),
         ('Cancelled', 'İptal Edildi'),
     ]
-    
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -64,9 +68,13 @@ class Order(models.Model):
         related_name='orders'
     )
 
+    def new_id(self):
+        return self.id
+
     def __str__(self):
         return f"Sipariş/ ID:{self.id} , Satın Alan:{self.user.email}"
     
+## Siparişteki ÜRÜNLER için kullanılan model.
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.CharField(max_length=100)

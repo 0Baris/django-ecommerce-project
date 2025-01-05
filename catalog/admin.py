@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, Slide, ProductImage
+from .models import Category, Product, Slide, ProductImage, Comment
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -21,3 +21,8 @@ class ProductAdmin(admin.ModelAdmin):
 class SlideAdmin(admin.ModelAdmin):
     list_display = ('name', 'product', 'created_at', 'updated_at')
     search_fields = ('name', 'product__name')
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'rating', 'created_at')
+    search_fields = ('product__name', 'user__username')

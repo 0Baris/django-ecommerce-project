@@ -3,9 +3,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from .models import Address
 
+## Kullanıcı oluşturma formu.
 class RegisterUserForm(UserCreationForm):
     email = forms.EmailField(widget=forms.EmailInput(
         attrs={'class': 'form-control', 'placeholder': 'E-Posta adresinizi girin', 'required': 'required'}), label="E-Posta")
+    phone = forms.CharField(max_length=15, widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Telefon numaranızı girin', 'required': 'required'}), label="Telefon")
     name = forms.CharField(max_length=50, widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Adınızı girin', 'required': 'required'}), label="Ad")
     surname = forms.CharField(max_length=50, widget=forms.TextInput(
@@ -24,10 +27,12 @@ class RegisterUserForm(UserCreationForm):
         user.email = self.cleaned_data['email']
         user.name = self.cleaned_data['name']
         user.surname = self.cleaned_data['surname']
+        user.phone = self.cleaned_data['phone']
         if commit:
             user.save()
         return user
 
+## Kullanıcı ADRES oluşturma formu.
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address

@@ -4,43 +4,42 @@
 {% block account %}
 
 <div class="col-md-9">
-    <div class="bg-white p-4 shadow-sm">
+  <div class="bg-white p-4 shadow-sm">
 
-      <div class="mb-5 flex justify-between items-center rounded">
-        <div class="fw-semibold fs-4">Siparişlerim</div>
-      </div>
-      
-      {% for ord in orders %}
-      <div class="card mb-3">
-          <div class="card-header">
-          <strong>Sipariş ID:</strong> {{ ord.id }} - <strong>Durum:</strong> {{ ord.get_status_display }}
-          </div>
-          <div class="card-body">
-          <h5 class="card-title">Toplam Tutar: {{ ord.total_amount }} TL</h5>
-          <p class="card-text"><strong>Sipariş Tarihi:</strong> {{ ord.order_date }}</p>
-          <p class="card-text"><strong>Adres:</strong> 
-          {{ ord.address.full_address }}, {{ ord.address.city }}, {{ ord.address.state }}, {{ ord.address.postal_code }}, {{ ord.address.country }}
-          </p>
-          {% if ord.discount_code %}
-          <p class="card-text"><strong>İndirim Kodu:</strong> {{ ord.discount_code.code }}</p>
-          {% endif %}
-          <div class="mt-3">
-          <h6>Alınan Ürünler:</h6>
-          <ul>
-          {% for item in ord.items.all reversed %}
-            <li>{{ item.product }} - {{ item.quantity }} adet - {{ item.price }} TL</li>
-          {% endfor %}
-          </ul>
-          </div>
-          </div>
-      </div>
-      {% empty %}
-      <p>Henüz siparişiniz yok.</p>
-      {% endfor %}
-
+    <div class="mb-5 flex justify-between items-center rounded">
+    <div class="fw-semibold fs-4">Siparişlerim</div>
     </div>
+    
+    {% for ord in orders %}
+    <div class="card mb-3">
+      <div class="card-header">
+      <strong>Sipariş ID:</strong> {{ ord.id }} - <strong>Durum:</strong> {{ ord.get_status_display }}
+      </div>
+      <div class="card-body">
+      <h5 class="card-title">Toplam Tutar: {{ ord.total_amount }} TL</h5>
+      <p class="card-text"><strong>Sipariş Tarihi:</strong> {{ ord.order_date }}</p>
+      <p class="card-text"><strong>Adres:</strong> 
+      {{ ord.address.full_address }}
+      </p>
+      {% if ord.discount_code %}
+      <p class="card-text"><strong>İndirim Kodu:</strong> {{ ord.discount_code.code }}</p>
+      {% endif %}
+      <div class="mt-3">
+      <h6>Alınan Ürünler:</h6>
+      <ul>
+      {% for item in ord.items.all reversed %}
+      <li>{{ item.product }} - {{ item.quantity }} adet - {{ item.price }} TL</li>
+      {% endfor %}
+      </ul>
+      </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>Henüz siparişiniz yok.</p>
+    {% endfor %}
+
   </div>
-</div>
+  </div>
 </div>
 
 {% endblock %}

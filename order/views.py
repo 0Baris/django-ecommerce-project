@@ -9,6 +9,7 @@ from decimal import Decimal
 from user.models import UserProfile 
 from user.models import Address
 
+## Sepetteki ürünlerin toplam değeri.
 def calculate_total_price(user_cart):
     subtotal = sum(int(item.product.price) * item.quantity for item in user_cart.cartitem_set.all())
     discount_code = user_cart.discount_code
@@ -20,7 +21,7 @@ def calculate_total_price(user_cart):
         total = subtotal
     return total
 
-#Sepet
+## Sepet özelliğinin temel fonksiyonu.
 @login_required
 def view_cart(request):
     user_cart = get_object_or_404(Cart, user=request.user)
@@ -35,18 +36,37 @@ def view_cart(request):
         'discount_code': user_cart.discount_code,
     })
 
+## İndirim kodu özelliğinin fonksiyonu. --Çok hatalı çalışıyor düzenlemeniz lazım.
 @login_required
 def apply_discount(request):
     if request.method == 'POST':
         discount_code = request.POST.get('discount_code')
+        
+        # İndirim kodu yoksa uygula butonu çalışmaz.
+        if not discount_code:
+            messages.error(request, "İndirim kodu boş olamaz.")
+            rendered_messages = render_to_string('partials/_messages.html', {}, request=request)
+
+            return JsonResponse({
+                'status': 'error',
+                'messages_html': rendered_messages
+            })
+
         user_cart = Cart.objects.get(user=request.user)
         
+        # İndirim kodu halihazırda uygulandıysa kullanıcı kodu değiştiremez.
+        if user_cart.discount_code:
+            messages.error(request, f"İndirim kodu zaten uygulanmış. Kullanılan Kod: {user_cart.discount_code.code}")
+            rendered_messages = render_to_string('partials/_messages.html', {}, request=request)
+
+            return JsonResponse({
+                'status': 'error',
+                'messages_html': rendered_messages
+            })
+
         try:
+            # Herhangi bir sorun yoksa indirim kodu burada uygulanır ve oturuma kaydedilir.
             code = DiscountCode.objects.get(code=discount_code, active=True)
-            
-            if user_cart.discount_code:
-                messages.info(request, f"Mevcut indirim kodu {user_cart.discount_code.code} değiştirildi.")
-            
             user_cart.discount_code = code
             user_cart.save()
 
@@ -54,22 +74,24 @@ def apply_discount(request):
 
             total_price = calculate_total_price(user_cart)
             request.session['total_price'] = str(total_price)
+            request.session['discount_code'] = user_cart.discount_code.code
 
             rendered_messages = render_to_string('partials/_messages.html', {}, request=request)
 
             cart_html = render_to_string('cart.html', {
-                'cart_items': user_cart.cartitem_set.all(),
-                'total_price': total_price,
-                'discount_code': user_cart.discount_code,
+            'cart_items': user_cart.cartitem_set.all(),
+            'total_price': total_price,
+            'discount_code': user_cart.discount_code,
             }, request=request)
 
             return JsonResponse({
-                'status': 'success',
-                'cart_html': cart_html,
-                'messages_html': rendered_messages
+            'status': 'success',
+            'cart_html': cart_html,
+            'messages_html': rendered_messages
             })
         
         except DiscountCode.DoesNotExist:
+            # İndirim kodu geçersizse burada hata mesajı verir.
             messages.error(request, "Geçersiz indirim kodu.")
             rendered_messages = render_to_string('partials/_messages.html', {}, request=request)
             return JsonResponse({
@@ -80,6 +102,7 @@ def apply_discount(request):
     return JsonResponse({'status': 'error', 'message': 'Geçersiz istek.'}, status=400)
 
 
+## Ürünleri sepete ekleme fonksiyonu.
 @login_required
 def add_to_cart(request, product_id):
     if request.method == 'POST':
@@ -87,6 +110,7 @@ def add_to_cart(request, product_id):
         user_cart, _ = Cart.objects.get_or_create(user=request.user)
         cart_item, created = CartItem.objects.get_or_create(cart=user_cart, product=product)
         
+        # Sepete ürün eklerken stoğundan fazla ürün eklenemez.
         if not created:
             if cart_item.quantity < product.stock_quantity:
                 cart_item.quantity += 1
@@ -99,6 +123,7 @@ def add_to_cart(request, product_id):
                 messages.error(request, "Stokta yeterli miktarda ürün yok.")
                 return JsonResponse({'status': 'error', 'message': 'Stokta yeterli miktarda ürün yok.'}, status=400)
 
+        # İşlem sonrası değerlerin yenilenmesi
         cart_items = user_cart.cartitem_set.all()
         total_price = calculate_total_price(user_cart)
         request.session['total_price'] = str(total_price)
@@ -118,9 +143,12 @@ def add_to_cart(request, product_id):
     
     return JsonResponse({'status': 'error'}, status=400)
 
+## Ürünlerin sepetteki miktarını azaltma fonksiyonu.
 @login_required
 def decrease_quantity(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
+
+    # Sepetteki ürünün sayısı 1'den az olamaz, adet azaltarak ürün kaldırılamaz.
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         cart_item.save()
@@ -133,6 +161,7 @@ def decrease_quantity(request, item_id):
             'messages_html': rendered_messages
         }, status=400)
 
+    # İşlem sonrası değerlerin yenilenmesi.
     user_cart = cart_item.cart
     cart_items = user_cart.cartitem_set.all()
     total_price = calculate_total_price(user_cart)
@@ -151,11 +180,13 @@ def decrease_quantity(request, item_id):
         'messages_html': rendered_messages
     })
 
+## Ürünlerin sepetteki miktarını arttırma fonksiyonu.
 @login_required
 def increase_quantity(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
     product = cart_item.product
 
+    # Stokta yeterli miktarda ürün yoksa burada uyarı verir.
     if cart_item.quantity < product.stock_quantity:
         cart_item.quantity += 1
         cart_item.save()
@@ -181,6 +212,7 @@ def increase_quantity(request, item_id):
         'messages_html': rendered_messages
     })
 
+## Ürünleri sepetten çıkartma fonksiyonu.
 @login_required
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id)
@@ -205,9 +237,15 @@ def remove_from_cart(request, item_id):
         'messages_html': rendered_messages
     })
 
+## Ödeme aşamasının tamamı bu fonksiyonda bulunur.
 @login_required
 def checkout(request):
     try:
+        if request.method == 'GET' and 'HTTP_REFERER' in request.META:
+            referer = request.META['HTTP_REFERER']
+            if referer == request.build_absolute_uri():
+                return render(request, 'error.html', {'message': 'Sayfa yenilendi, lütfen tekrar deneyin.'})
+
         order_id = request.GET.get('id')
         step = request.GET.get('step', 'info')
 
@@ -218,6 +256,7 @@ def checkout(request):
 
         order = get_object_or_404(Order, id=order_id, user=request.user)
 
+        # Adres seçimi ve kaydetme işlemi burada gerçekleşir.
         if step == 'info':
             if request.method == 'POST':
                 address_id = request.POST.get('address_id')
@@ -227,6 +266,7 @@ def checkout(request):
                 return redirect(reverse('order:checkout') + f'?id={order.id}&step=payment')
             return render(request, 'info.html', {'order': order})
 
+        # Ödeme işlemi burada gerçekleşir.
         elif step == 'payment':
             if request.method == 'POST':
                 payment_method = request.POST.get('payment_method')
@@ -235,6 +275,7 @@ def checkout(request):
                 return redirect(reverse('order:checkout') + f'?id={order.id}&step=confirmation')
             return render(request, 'payment.html', {'order': order})
 
+        # Sepetin işlenmesi ve siparişin tamamlanması burada gerçekleşir.
         elif step == 'confirmation':
             user_cart = get_object_or_404(Cart, user=request.user)
             total_amount = calculate_total_price(user_cart)
@@ -248,6 +289,7 @@ def checkout(request):
 
             order.save()
 
+            # Sepetteki ürünlerin, ürün stoğundan azaltılması.
             for cart_item in user_cart.cartitem_set.all():
                 product = cart_item.product
                 product.stock_quantity -= cart_item.quantity
@@ -255,6 +297,7 @@ def checkout(request):
 
                 order.items.create(product=product.name, quantity=cart_item.quantity, price=product.price)
 
+            # İndirim kodunun işlem ücretinin ve kullanımının kaydedilmesi (örn: kullanım-1, komisyon-100).
             if user_cart.discount_code:
                 discount_code = user_cart.discount_code
                 discount_code.usage += 1
@@ -264,6 +307,7 @@ def checkout(request):
                 order.discount_code = discount_code
                 order.save()
 
+            # İndirim kodunun ve ücretin temizlenmesi.
             request.session.pop('total_price', None)
             request.session.pop('discount_code', None)
 
@@ -272,6 +316,7 @@ def checkout(request):
 
             user_cart.cartitem_set.all().delete()
             user_cart.save()
+
             return render(request, 'confirmation.html', {'order': order})
 
         else:

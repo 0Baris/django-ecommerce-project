@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import DiscountCode, Cart, CartItem, Order, OrderItem
 
+## Sipariş kısmının admin panelini buradan yönetebilirsiniz.
+
 @admin.register(DiscountCode)
 class DiscountCodeAdmin(admin.ModelAdmin):
     list_display = ('code', 'usage', 'usage_fee' , 'discount', 'active', 'created_at', 'updated_at')
@@ -12,10 +14,6 @@ class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'discount_code')
     search_fields = ('user__username', 'discount_code__code')
 
-@admin.register(CartItem)
-class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('cart', 'product', 'quantity')
-    search_fields = ('cart__user__username', 'product__productName')
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
@@ -34,7 +32,7 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'status', 'order_date', 'total_amount')
+    list_display = ('new_id', 'user', 'status', 'order_date', 'total_amount')
     list_filter = ('status', 'order_date')
     search_fields = ('user__username', 'user__email')
     inlines = [OrderItemInline]
