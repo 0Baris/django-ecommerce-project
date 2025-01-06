@@ -58,7 +58,7 @@ Django E-commerce Projesi, kullanıcıların ürünleri görüntüleyip sepetler
 - **Virtual Environment Kurulumu için Araç:**
   - `venv` veya `virtualenv`
 
-### 🚀 Adım Adım Kurulum
+### 🚀 Adım Adım Kurulum (Docker ile)
 
 1. **Proje Deposu Klonlama:**
 
@@ -67,39 +67,19 @@ Django E-commerce Projesi, kullanıcıların ürünleri görüntüleyip sepetler
     cd django-ecommerce
     ```
 
-2. **Sanal Ortam Oluşturma ve Aktifleştirme:**
+2. **Docker ve Docker Compose Kurulumu:**
 
-    ```bash
-    python -m venv env
-    # Windows
-    env\Scripts\activate
-    # MacOS/Linux
-    source env/bin/activate
-    ```
+    Docker ve Docker Compose'un sisteminizde kurulu olduğundan emin olun. Kurulum için aşağıdaki bağlantıları kullanabilirsiniz:
+    - [Docker Kurulumu](https://docs.docker.com/get-docker/)
+    - [Docker Compose Kurulumu](https://docs.docker.com/compose/install/)
 
-3. **Gerekli Paketlerin Yüklenmesi:**
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. **.env Dosyasını Oluşturma ve Yapılandırma:**
+3. **.env Dosyasını Oluşturma ve Yapılandırma:**
 
     Projenin kök dizininde `.env` dosyası oluşturun ve aşağıdaki ortam değişkenlerini ekleyin:
 
     ```env
-    SECRET_KEY=django-insecure-<your_secret_key>
-
-    # SECRET_KEY oluşturmak için aşağıdaki Python komutunu kullanabilirsiniz:
-    # 
-    # ```python
-    # from django.core.management.utils import get_random_secret_key
-    # print(get_random_secret_key())
-    # ```
-    #
-    # Bu komut, terminalde çalıştırıldığında yeni bir SECRET_KEY üretecektir.
-    
-    DEBUG=True
+    SECRET_KEY=<your_secret_key>
+    DEBUG=False
     ALLOWED_HOSTS=localhost,127.0.0.1
 
     # Veritabanı Ayarları
@@ -113,36 +93,42 @@ Django E-commerce Projesi, kullanıcıların ürünleri görüntüleyip sepetler
     EMAIL_HOST_USER=<your_email>
     EMAIL_HOST_PASSWORD=<your_email_password>
     ```
+
     `<your_secret_key>`, `<db_user>`, `<db_password>`, `<db_name>`, `<your_email>`, ve `<your_email_password>` değerlerini kendi bilgilerinize göre doldurun.
 
-5. **Veritabanı Migrasyonlarını Çalıştırma:**
+4. **Docker Konteynerlerini Başlatma:**
 
     ```bash
-    python manage.py makemigrations
-    python manage.py migrate
+    docker-compose up --build
     ```
+
+    Bu komut, gerekli Docker konteynerlerini oluşturacak ve başlatacaktır.
+
+5. **Veritabanı Migrasyonlarını Uygulama:**
+
+    Ayrı bir terminal penceresi açarak aşağıdaki komutu çalıştırın:
+
+    ```bash
+    docker-compose exec web python manage.py migrate
+    ```
+
+    Bu komut, veritabanı tablolarını oluşturacaktır.
 
 6. **Süper Kullanıcı Oluşturma:**
 
+    Ayrı bir terminal penceresi açarak aşağıdaki komutu çalıştırın:
+
     ```bash
-    python manage.py createsuperuser
+    docker-compose exec web python manage.py createsuperuser
     ```
 
     Takip eden adımları doldurarak yönetici hesabınızı oluşturun.
 
-7. **Statik Dosyaları Toplama:**
+7. **Geliştirme Sunucusunu Başlatma:**
 
-    ```bash
-    python manage.py collectstatic
-    ```
+    Docker Compose ile başlatılan sunucu zaten çalışıyor olacaktır. Tarayıcıda `http://127.0.0.1:8000/` adresine giderek projeyi görüntüleyebilirsiniz.
 
-8. **Geliştirme Sunucusunu Başlatma:**
-
-    ```bash
-    python manage.py runserver
-    ```
-
-    Tarayıcıda `http://127.0.0.1:8000/` adresine giderek projeyi görüntüleyebilirsiniz.
+Docker ile kurulum tamamlandı! Artık projeyi Docker konteynerleri içinde çalıştırabilirsiniz.
 
 ## 📚 Kullanım
 

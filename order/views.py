@@ -79,15 +79,15 @@ def apply_discount(request):
             rendered_messages = render_to_string('partials/_messages.html', {}, request=request)
 
             cart_html = render_to_string('cart.html', {
-            'cart_items': user_cart.cartitem_set.all(),
-            'total_price': total_price,
-            'discount_code': user_cart.discount_code,
+                'cart_items': user_cart.cartitem_set.all(),
+                'total_price': total_price,
+                'discount_code': user_cart.discount_code,
             }, request=request)
 
             return JsonResponse({
-            'status': 'success',
-            'cart_html': cart_html,
-            'messages_html': rendered_messages
+                'status': 'success',
+                'cart_html': cart_html,
+                'messages_html': rendered_messages
             })
         
         except DiscountCode.DoesNotExist:
@@ -133,12 +133,14 @@ def add_to_cart(request, product_id):
         cart_html = render_to_string('cart.html', {
             'cart_items': cart_items,
             'total_price': total_price,
+            'discount_code': user_cart.discount_code if user_cart.discount_code else None,
         }, request=request)
 
         return JsonResponse({
             'status': 'success',
             'cart_html': cart_html,
-            'rendered_messages': rendered_messages
+            'rendered_messages': rendered_messages,
+            'reload': True  # Sayfanın yenilenmesi gerektiğini belirtir
         })
     
     return JsonResponse({'status': 'error'}, status=400)

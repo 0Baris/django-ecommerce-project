@@ -46,6 +46,7 @@
 
             {% endblock %}
 
+            /// Sayfa yüklendiğinde otomatik olarak toast mesajlarını ve olası sepet açma işlemini başlatır.
             document.addEventListener('DOMContentLoaded', function () {
                 var toastElList = [].slice.call(document.querySelectorAll('.toast'))
                 var toastList = toastElList.map(function (toastEl) {
@@ -53,7 +54,7 @@
                 });
                 toastList.forEach(toast => toast.show());
             });
-        
+            
             document.addEventListener('DOMContentLoaded', function () {
                 const urlParams = new URLSearchParams(window.location.search);
                 if (urlParams.has('show_cart')) {
@@ -61,7 +62,9 @@
                     offcanvas.show();
                 }
             });
-
+            
+            /// Sunucuya gönderilen bir POST isteği aracılığıyla sepeti güncelleme (ürün ekle, çıkar, vb.) işlemini gerçekleştirir. 
+            /// Başarılı ise sayfa içeriğini (cart-content) yeniler. 
             function updateCart(action, itemId) {
                 const url = `/order/cart/${action}/${itemId}/`;
                 fetch(url, {
@@ -76,13 +79,18 @@
                     if (data.status === 'success') {
                         document.getElementById('cart-content').innerHTML = data.cart_html;
                         updateMessages(data.messages_html);
+                        if (data.reload) {
+                            location.reload();
+                        }
                     } else if (data.status === 'error') {
                         updateMessages(data.messages_html);
                     }
                 })
                 .catch(error => console.error('Error:', error));
             }
-
+            
+            /// İndirim kodu uygulamak için form verilerini sunucuya POST isteğiyle gönderir, 
+            /// yanıt durumuna göre sepet içeriğini ve mesajları günceller. 
             function applyDiscount() {
                 const discountForm = document.getElementById('discount-form');
                 discountForm.addEventListener('submit', function(event) {
@@ -108,9 +116,9 @@
                     .catch(error => console.error('Error:', error));
                 });
             }
-            
-
-
+           
+            /// Daha önceki toast mesajlarını kaldırarak yeni mesajları (toast-container) sayfaya ekler. 
+            /// initToasts() metodu yardımıyla yeni toast'ları görüntüler. 
             function updateMessages(messagesHtml) {
                 const existingToasts = document.querySelectorAll('.toast-container');
                 existingToasts.forEach(toast => toast.remove());
@@ -119,7 +127,9 @@
                 
                 initToasts();
             }
-
+            
+            
+            /// Yeni eklenen toast öğelerini bootstrap ile başlatarak belirlenen süre boyunca görüntülemeyi sağlar.
             function initToasts() {
                 const toastElList = document.querySelectorAll('.toast');
                 toastElList.forEach(toastEl => {
@@ -130,7 +140,7 @@
                     toast.show();
                 });
             }
-
+            
             document.addEventListener('DOMContentLoaded', function () {
                 initToasts();
                 applyDiscount();

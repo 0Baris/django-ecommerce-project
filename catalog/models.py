@@ -103,22 +103,32 @@ class ProductImage(models.Model):
     image_name = models.CharField(max_length=255, blank=True)
 
     def save(self, *args, **kwargs):
-        if not self.image_name:
-            self.image_name = self.image.name
-
         image = Image.open(self.image)
         max_size = (800, 800)
+
         if image.height > max_size[0] or image.width > max_size[1]:
             image.thumbnail(max_size, Image.LANCZOS)
+
         output = io.BytesIO()
         image.save(output, format='WEBP', quality=85)
         output.seek(0)
-        self.image = InMemoryUploadedFile(output, 'ImageField', f"{self.image.name.split('.')[0]}.webp", 'image/webp', output.getbuffer().nbytes, None)
+
+        webp_image_name = f"{self.image.name.split('.')[0]}.webp"
+
+        self.image = InMemoryUploadedFile(
+            output,
+            'ImageField',
+            webp_image_name,
+            'image/webp',
+            output.getbuffer().nbytes,
+            None
+        )
 
         super().save(*args, **kwargs)
 
-    def __str__(self):
-        return f"{self.product.name} Resmi {self.id} - {self.image_name}"
+        if not self.image_name:
+            self.image_name = webp_image_name
+            super().save(update_fields=['image_name'])
 
 
 ## Yorum Modeli

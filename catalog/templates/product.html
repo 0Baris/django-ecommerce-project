@@ -166,58 +166,74 @@
 
 {% block js %}
 
-        document.querySelectorAll('.thumbnail').forEach(thumbnail => {
+    // Thumbnail resimlerine tıklandığında ana resmi günceller, aktif durumu değiştirir.
+    document.querySelectorAll('.thumbnail').forEach(thumbnail => {
         thumbnail.addEventListener('click', function () {
+
+            // Ana resmi seçilen thumbnail ile değiştirir.
             const mainImage = document.getElementById('main-product-image');
             mainImage.src = this.src;
-    
+
+            // Tüm thumbnail'lerin aktif sınıfını temizler.
             document.querySelectorAll('.thumbnail').forEach(thumb => {
                 thumb.classList.remove('active-thumbnail');
             });
-    
+
+            // Tıklanan thumbnail'i aktif olarak işaretler.
             this.classList.add('active-thumbnail');
+
         });
     });
-    
-    
+
+    // "Sepete ekle" formunu gönderir, dönen cevaba göre sayfayı veya sepet görünümünü günceller.
     document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
         e.preventDefault();
-    
+
         const url = this.action;
         const formData = new FormData(this);
-    
+
+        // AJAX isteği ile form verilerini gönderir.
         fetch(url, {
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             body: formData
         })
         .then(res => {
+            // Hata varsa sayfayı yeniler.
             if (res.status === 400) {
                 location.reload();
             }
             return res.json();
         })
         .then(data => {
+
+            // Başarılıysa sepet içeriğini günceller ve gerekirse sayfayı yeniler.
+
             if (data.status === 'success') {
                 document.getElementById('cart-content').innerHTML = data.cart_html;
                 let offcanvas = new bootstrap.Offcanvas(document.getElementById('cartOffcanvas'));
-                offcanvas.show();
+                if (data.reload) {
+                    location.reload();
+                }
             }
         })
         .catch(console.error);
     });
-    
+
+    // İnceleme formunun görünürlüğünü değiştirir.
     function toggleReviewForm() {
         const form = document.getElementById('reviewForm');
         form.style.display = form.style.display === 'none' ? 'block' : 'none';
     }
 
+    // Sayfa yüklendiğinde rating elemanlarını değerlendirir ve yıldızları oluşturur.
     document.addEventListener("DOMContentLoaded", function () {
         const ratingElements = document.querySelectorAll(".rating");
-    
+
         ratingElements.forEach((ratingElement) => {
             const rating = parseInt(ratingElement.getAttribute("data-rating")) || 0;
-    
+
+            // Kullanıcı değerlendirmesine göre yıldızları gösterir.
             for (let i = 1; i <= 5; i++) {
                 const star = document.createElement("span");
                 if (i <= rating) {
