@@ -51,13 +51,6 @@ Django E-commerce Projesi, kullanıcıların ürünleri görüntüleyip sepetler
 
 ## ⚙️ Kurulum ve Başlangıç
 
-### 📋 Ön Koşullar
-
-- **Python 3.x:** [Python İndir](https://www.python.org/downloads/)
-- **Git:** [Git İndir](https://git-scm.com/downloads)
-- **Virtual Environment Kurulumu için Araç:**
-  - `venv` veya `virtualenv`
-
 ### 🚀 Adım Adım Kurulum (Docker ile)
 
 1. **Proje Deposu Klonlama:**
