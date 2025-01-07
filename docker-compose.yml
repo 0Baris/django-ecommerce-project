@@ -6,7 +6,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: eticaret ## Veritabanı ismi
+      POSTGRES_DB: ecommerce ## Veritabanı ismi
       POSTGRES_USER: postgres ## Veritabanı kullanıcı adı
       POSTGRES_PASSWORD: 1234 ## Veritabanı şifresi
 

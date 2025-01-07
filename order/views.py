@@ -6,8 +6,9 @@ from catalog.models import Product
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from decimal import Decimal
-from user.models import UserProfile 
-from user.models import Address
+import uuid
+from user.models import UserProfile, Address
+
 
 ## Sepetteki ürünlerin toplam değeri.
 def calculate_total_price(user_cart):
@@ -243,22 +244,20 @@ def remove_from_cart(request, item_id):
 @login_required
 def checkout(request):
     try:
-        if request.method == 'GET' and 'HTTP_REFERER' in request.META:
-            referer = request.META['HTTP_REFERER']
-            if referer == request.build_absolute_uri():
-                return render(request, 'error.html', {'message': 'Sayfa yenilendi, lütfen tekrar deneyin.'})
-
+        # Sipariş ID ve adım bilgisini al
         order_id = request.GET.get('id')
         step = request.GET.get('step', 'info')
 
+        # Eğer sipariş ID mevcut değilse, yeni bir sipariş oluştur
         if not order_id:
             new_order = Order.objects.create(user=request.user)
             checkout_url = reverse('order:checkout') + f'?id={new_order.id}&step=info'
             return redirect(checkout_url)
 
+        # Siparişi al
         order = get_object_or_404(Order, id=order_id, user=request.user)
 
-        # Adres seçimi ve kaydetme işlemi burada gerçekleşir.
+        # Adres seçimi ve kaydetme
         if step == 'info':
             if request.method == 'POST':
                 address_id = request.POST.get('address_id')
@@ -268,16 +267,25 @@ def checkout(request):
                 return redirect(reverse('order:checkout') + f'?id={order.id}&step=payment')
             return render(request, 'info.html', {'order': order})
 
-        # Ödeme işlemi burada gerçekleşir.
+        # Ödeme işlemi
         elif step == 'payment':
             if request.method == 'POST':
+                if request.session.get('payment_completed'):
+                    return render(request, 'error.html', {'message': 'Ödeme zaten tamamlandı.'})
+
                 payment_method = request.POST.get('payment_method')
                 order.payment_method = payment_method
                 order.save()
-                return redirect(reverse('order:checkout') + f'?id={order.id}&step=confirmation')
-            return render(request, 'payment.html', {'order': order})
 
-        # Sepetin işlenmesi ve siparişin tamamlanması burada gerçekleşir.
+                request.session['payment_completed'] = True
+
+                return redirect(reverse('order:checkout') + f'?id={order.id}&step=confirmation')
+
+            transaction_id = str(uuid.uuid4())
+            request.session['transaction_id'] = transaction_id
+            return render(request, 'payment.html', {'order': order, 'transaction_id': transaction_id})
+
+        # Siparişin tamamlanması
         elif step == 'confirmation':
             user_cart = get_object_or_404(Cart, user=request.user)
             total_amount = calculate_total_price(user_cart)
@@ -291,15 +299,12 @@ def checkout(request):
 
             order.save()
 
-            # Sepetteki ürünlerin, ürün stoğundan azaltılması.
             for cart_item in user_cart.cartitem_set.all():
                 product = cart_item.product
                 product.stock_quantity -= cart_item.quantity
                 product.save()
-
                 order.items.create(product=product.name, quantity=cart_item.quantity, price=product.price)
 
-            # İndirim kodunun işlem ücretinin ve kullanımının kaydedilmesi (örn: kullanım-1, komisyon-100).
             if user_cart.discount_code:
                 discount_code = user_cart.discount_code
                 discount_code.usage += 1
@@ -309,19 +314,18 @@ def checkout(request):
                 order.discount_code = discount_code
                 order.save()
 
-            # İndirim kodunun ve ücretin temizlenmesi.
             request.session.pop('total_price', None)
             request.session.pop('discount_code', None)
 
             user_cart.discount_code = None
             user_cart.save()
-
             user_cart.cartitem_set.all().delete()
             user_cart.save()
 
             return render(request, 'confirmation.html', {'order': order})
 
         else:
-            return render(request, 'error.html', {'message': 'Invalid checkout step.'})
+            return render(request, 'error.html', {'message': 'Geçersiz işlem adımı.'})
+
     except Exception as e:
         return render(request, 'error.html', {'message': str(e)})
