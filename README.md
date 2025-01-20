@@ -2,6 +2,9 @@
 
 > **Not:** Projedeki hatalar ve ödeme entragrasyonu çözümleri için bana mail üzerinden ulaşabilirsiniz. bariscem@proton.me
 
+![localhost_8000_ (1)](https://github.com/user-attachments/assets/38e73756-973a-479d-9b6a-965686a4b1c9)
+
+
 ## 📦 İçindekiler
 
 - [📖 Proje Hakkında](#-proje-hakkında)
