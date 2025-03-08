@@ -47,7 +47,7 @@ def register_user(request):
             backend = 'user.backends.EmailBackend'
             login(request, user, backend=backend)
             messages.success(request, "Kayıt başarılı!")
-            return redirect('catalog:index')
+            return redirect('user:add_address')
         else:
             messages.error(request, "Lütfen formu doğru doldurunuz.")
     else:

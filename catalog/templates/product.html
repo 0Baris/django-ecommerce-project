@@ -55,38 +55,49 @@
             </div>
 
             <div class="mb-3">
+              <div class="d-flex gap-3">
+                
                 {% if user.is_authenticated %}
-                <div class="d-flex gap-3">
-                    {% if product.stock_quantity == 0 %}
-                        <div class="input-group" style="width: 120px;">
-                            <input type="number" class="form-control text-center" value="0"
-                                min="0" max="0" step="1" disabled>
-                        </div>
-                        <form id="add-to-cart-form" method="post" action="">
-                            <button type="button" class="btn btn-danger" disabled>
-                                <i class="bi bi-cart"></i> Stokta Yok
-                            </button>
-                        </form>
+                    {% if user.addresses.exists %}
+                      {% if product.stock_quantity == 0 %}
+                          <div class="input-group" style="width: 120px;">
+                              <input type="number" class="form-control text-center" value="0"
+                                  min="0" max="0" step="1" disabled>
+                          </div>
+                          <form id="add-to-cart-form" method="post" action="">
+                              <button type="button" class="btn btn-danger" disabled>
+                                  <i class="bi bi-cart"></i> Stokta Yok
+                              </button>
+                          </form>
+                      {% else %}
+                          <div class="input-group" style="width: 120px;">
+                              <input type="number" class="form-control text-center" value="1"
+                                  min="1" max="{{ product.stock_quantity }}" step="1">
+                          </div>
+                          <form id="add-to-cart-form" method="post" action="{% url 'order:add_to_cart' product.id %}">
+                              {% csrf_token %}
+                              <button type="submit" class="btn btn-primary">
+                                  <i class="bi bi-cart"></i> SEPETE EKLE
+                              </button>
+                          </form>
+                      {% endif %}
                     {% else %}
-                        <div class="input-group" style="width: 120px;">
-                            <input type="number" class="form-control text-center" value="1"
-                                min="1" max="{{ product.stock_quantity }}" step="1">
-                        </div>
-                        <form id="add-to-cart-form" method="post" action="{% url 'order:add_to_cart' product.id %}">
+                          <form method="get" action="{% url 'user:add_address' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-cart"></i> SEPETE EKLE
+                            <button type="submit" class="btn btn-warning">
+                              <i class="bi bi-cart"></i> Adres Ekle
                             </button>
-                        </form>
+                          </form>
                     {% endif %}
                 {% else %}
-                <div class="d-flex gap-3">
+                  <div class="d-flex gap-3">
                     <form method="get" action="{% url 'user:login' %}">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-cart"></i> SATIN ALMAK İÇİN GİRİŞ YAP
                         </button>
                     </form>
                 {% endif %}
+
                 </div>
             </div>
 
