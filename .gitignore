@@ -13,6 +13,9 @@ TODO
 staticfiles
 .ebextensions
 
+.idea/
+.elasticbeanstalk/
+
 # Distribution / packaging
 .Python
 build/
@@ -174,3 +177,7 @@ package-lock.json
 package.json
 .prettierrc
 .prettierignore
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
